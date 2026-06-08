@@ -193,7 +193,7 @@ export default {
           payload.admin_code = this.adminCode
         }
 
-        await axios.post('http://127.0.0.1:8000/api/register', payload, {
+        await axios.post('https://colris-chatbot-backend-production.up.railway.app/api/register', payload, {
           headers: { Accept: 'application/json' },
         })
 
@@ -218,7 +218,7 @@ export default {
       this.isLoading = true
       try {
         const response = await axios.post(
-          'http://127.0.0.1:8000/api/verify-otp',
+          'https://colris-chatbot-backend-production.up.railway.app/api/verify-otp',
           {
             email: this.email,
             otp: this.otpCode,
@@ -246,7 +246,7 @@ export default {
     async resendOtp() {
       try {
         await axios.post(
-          'http://127.0.0.1:8000/api/resend-otp',
+          'https://colris-chatbot-backend-production.up.railway.app/api/resend-otp',
           {
             email: this.email,
           },

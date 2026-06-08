@@ -119,7 +119,7 @@ export default {
       this.isLoadingHistory = true
       try {
         const token = localStorage.getItem('token')
-        const response = await axios.get('http://127.0.0.1:8000/api/chat/history', {
+        const response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/chat/history', {
           headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
         })
         this.sessions = response.data.history

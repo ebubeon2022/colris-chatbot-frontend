@@ -579,20 +579,20 @@ export default {
     loadDashboard: async function() {
       this.isLoadingDashboard = true
       try {
-        var response = await axios.get('http://127.0.0.1:8000/api/admin/dashboard', { headers: this.headers() })
+        var response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/admin/dashboard', { headers: this.headers() })
         this.stats = response.data
       } catch(e) { console.error(e) } finally { this.isLoadingDashboard = false }
     },
     loadSettings: async function() {
       try {
-        var response = await axios.get('http://127.0.0.1:8000/api/admin/settings', { headers: this.headers() })
+        var response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/admin/settings', { headers: this.headers() })
         this.settings = response.data.settings.map(function(s) { return Object.assign({}, s, { saving: false, saved: false }) })
       } catch(e) { console.error(e) } finally { this.isLoadingSettings = false }
     },
     saveSetting: async function(setting) {
       setting.saving = true
       try {
-        await axios.put('http://127.0.0.1:8000/api/admin/settings/' + setting.key, { value: setting.value }, { headers: this.headers() })
+        await axios.put('https://colris-chatbot-backend-production.up.railway.app/api/admin/settings/' + setting.key, { value: setting.value }, { headers: this.headers() })
         setting.saved = true
         setTimeout(function() { setting.saved = false }, 2000)
       } catch(e) { console.error(e) } finally { setting.saving = false }
@@ -600,27 +600,27 @@ export default {
     loadBooks: async function() {
       this.isLoadingBooks = true
       try {
-        var response = await axios.get('http://127.0.0.1:8000/api/admin/books', { headers: this.headers() })
+        var response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/admin/books', { headers: this.headers() })
         this.books = response.data.books
       } catch(e) { console.error(e) } finally { this.isLoadingBooks = false }
     },
     loadUsers: async function() {
       this.isLoadingUsers = true
       try {
-        var response = await axios.get('http://127.0.0.1:8000/api/admin/users', { headers: this.headers() })
+        var response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/admin/users', { headers: this.headers() })
         this.users = response.data.users
       } catch(e) { console.error(e) } finally { this.isLoadingUsers = false }
     },
     loadKnowledge: async function() {
       this.isLoadingKnowledge = true
       try {
-        var response = await axios.get('http://127.0.0.1:8000/api/admin/knowledge', { headers: this.headers() })
+        var response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/admin/knowledge', { headers: this.headers() })
         this.knowledge = response.data.knowledge
       } catch(e) { console.error(e) } finally { this.isLoadingKnowledge = false }
     },
     loadPersonality: async function() {
       try {
-        var response = await axios.get('http://127.0.0.1:8000/api/admin/personality', { headers: this.headers() })
+        var response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/admin/personality', { headers: this.headers() })
         this.personality = {
           ai_name: response.data.ai_name || 'COLRIS Library Assistant',
           ai_greeting: response.data.ai_greeting || 'Hello! I am the COLRIS Library AI Assistant. How can I help you today?',
@@ -632,7 +632,7 @@ export default {
     savePersonality: async function() {
       this.isSavingPersonality = true
       try {
-        await axios.put('http://127.0.0.1:8000/api/admin/personality', this.personality, { headers: this.headers() })
+        await axios.put('https://colris-chatbot-backend-production.up.railway.app/api/admin/personality', this.personality, { headers: this.headers() })
         this.personalitySaved = true
         setTimeout(function() { this.personalitySaved = false }.bind(this), 3000)
       } catch(e) { console.error(e) } finally { this.isSavingPersonality = false }
@@ -640,7 +640,7 @@ export default {
     loadLogs: async function() {
       this.isLoadingLogs = true
       try {
-        var response = await axios.get('http://127.0.0.1:8000/api/admin/logs', { headers: this.headers() })
+        var response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/admin/logs', { headers: this.headers() })
         this.logs = response.data.logs.data || response.data.logs
       } catch(e) { console.error(e) } finally { this.isLoadingLogs = false }
     },
@@ -665,7 +665,7 @@ export default {
       this.isDeletingLogs = true
       this.deleteLogsResult = null
       try {
-        var response = await axios.delete('http://127.0.0.1:8000/api/admin/logs/old', { headers: this.headers(), data: { days: this.deleteOlderThan } })
+        var response = await axios.delete('https://colris-chatbot-backend-production.up.railway.app/api/admin/logs/old', { headers: this.headers(), data: { days: this.deleteOlderThan } })
         this.deleteLogsResult = { success: true, message: response.data.message }
         await this.loadLogs()
       } catch(e) {
@@ -683,7 +683,7 @@ export default {
     },
     toggleArrival: async function(book) {
       try {
-        await axios.put('http://127.0.0.1:8000/api/admin/books/' + book.id + '/toggle-arrival', {}, { headers: this.headers() })
+        await axios.put('https://colris-chatbot-backend-production.up.railway.app/api/admin/books/' + book.id + '/toggle-arrival', {}, { headers: this.headers() })
         book.is_new_arrival = !book.is_new_arrival
       } catch(e) { console.error(e) }
     },
@@ -701,23 +701,23 @@ export default {
       this.isSavingKnowledge = true
       try {
         if (this.editingKnowledge) {
-          await axios.put('http://127.0.0.1:8000/api/admin/knowledge/' + this.editingKnowledge.id, this.knowledgeForm, { headers: this.headers() })
+          await axios.put('https://colris-chatbot-backend-production.up.railway.app/api/admin/knowledge/' + this.editingKnowledge.id, this.knowledgeForm, { headers: this.headers() })
         } else {
-          await axios.post('http://127.0.0.1:8000/api/admin/knowledge', this.knowledgeForm, { headers: this.headers() })
+          await axios.post('https://colris-chatbot-backend-production.up.railway.app/api/admin/knowledge', this.knowledgeForm, { headers: this.headers() })
         }
         this.cancelKnowledge(); await this.loadKnowledge()
       } catch(e) { console.error(e) } finally { this.isSavingKnowledge = false }
     },
     toggleKnowledge: async function(item) {
       try {
-        await axios.put('http://127.0.0.1:8000/api/admin/knowledge/' + item.id + '/toggle', {}, { headers: this.headers() })
+        await axios.put('https://colris-chatbot-backend-production.up.railway.app/api/admin/knowledge/' + item.id + '/toggle', {}, { headers: this.headers() })
         item.active = !item.active
       } catch(e) { console.error(e) }
     },
     deleteKnowledge: async function(id) {
       if (!confirm('Delete this knowledge entry?')) return
       try {
-        await axios.delete('http://127.0.0.1:8000/api/admin/knowledge/' + id, { headers: this.headers() })
+        await axios.delete('https://colris-chatbot-backend-production.up.railway.app/api/admin/knowledge/' + id, { headers: this.headers() })
         await this.loadKnowledge()
       } catch(e) { console.error(e) }
     },
@@ -735,9 +735,9 @@ export default {
       this.isSavingBook = true
       try {
         if (this.editingBook) {
-          await axios.put('http://127.0.0.1:8000/api/admin/books/' + this.editingBook.id, this.bookForm, { headers: this.headers() })
+          await axios.put('https://colris-chatbot-backend-production.up.railway.app/api/admin/books/' + this.editingBook.id, this.bookForm, { headers: this.headers() })
         } else {
-          await axios.post('http://127.0.0.1:8000/api/admin/books', this.bookForm, { headers: this.headers() })
+          await axios.post('https://colris-chatbot-backend-production.up.railway.app/api/admin/books', this.bookForm, { headers: this.headers() })
         }
         this.showAddBook = false; this.editingBook = null; this.resetBookForm(); await this.loadBooks()
       } catch(e) { console.error(e) } finally { this.isSavingBook = false }
@@ -745,7 +745,7 @@ export default {
     deleteBook: async function(id) {
       if (!confirm('Delete this book?')) return
       try {
-        await axios.delete('http://127.0.0.1:8000/api/admin/books/' + id, { headers: this.headers() })
+        await axios.delete('https://colris-chatbot-backend-production.up.railway.app/api/admin/books/' + id, { headers: this.headers() })
         await this.loadBooks()
       } catch(e) { console.error(e) }
     },
@@ -757,20 +757,20 @@ export default {
       try {
         var formData = new FormData()
         formData.append('csv_file', this.csvFile)
-        var response = await axios.post('http://127.0.0.1:8000/api/admin/books/import', formData, { headers: Object.assign({}, this.headers(), { 'Content-Type': 'multipart/form-data' }) })
+        var response = await axios.post('https://colris-chatbot-backend-production.up.railway.app/api/admin/books/import', formData, { headers: Object.assign({}, this.headers(), { 'Content-Type': 'multipart/form-data' }) })
         this.importResult = response.data; this.csvFile = null; await this.loadBooks()
       } catch(e) { console.error(e); this.importResult = { message: 'Import failed. Please check your CSV format.', errors: 1 } } finally { this.isImporting = false }
     },
     updateRole: async function(user, event) {
       try {
-        await axios.put('http://127.0.0.1:8000/api/admin/users/' + user.id + '/role', { role: event.target.value }, { headers: this.headers() })
+        await axios.put('https://colris-chatbot-backend-production.up.railway.app/api/admin/users/' + user.id + '/role', { role: event.target.value }, { headers: this.headers() })
         user.role = event.target.value
       } catch(e) { console.error(e) }
     },
     deleteUser: async function(id) {
       if (!confirm('Delete this user?')) return
       try {
-        await axios.delete('http://127.0.0.1:8000/api/admin/users/' + id, { headers: this.headers() })
+        await axios.delete('https://colris-chatbot-backend-production.up.railway.app/api/admin/users/' + id, { headers: this.headers() })
         await this.loadUsers()
       } catch(e) { console.error(e) }
     },

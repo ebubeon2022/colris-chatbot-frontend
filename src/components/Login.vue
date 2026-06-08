@@ -73,7 +73,7 @@ export default {
       this.isLoading = true
       try {
         const response = await axios.post(
-          'http://127.0.0.1:8000/api/login',
+          'https://colris-chatbot-backend-production.up.railway.app/api/login',
           {
             email: this.email,
             password: this.password,

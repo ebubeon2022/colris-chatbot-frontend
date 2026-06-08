@@ -174,7 +174,7 @@ export default {
   },
   async mounted() {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/settings/public')
+      const response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/settings/public')
       if (response.data.library_announcement) {
         this.announcement = response.data.library_announcement
       }
@@ -197,7 +197,7 @@ export default {
     async loadNewArrivals() {
       this.isLoadingArrivals = true
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/books/new-arrivals')
+        const response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/books/new-arrivals')
         this.newArrivals = response.data.books || []
       } catch (e) {
         console.error(e)
@@ -267,7 +267,7 @@ export default {
       this.searchResults = []
       try {
         var token = localStorage.getItem('token')
-        var response = await axios.get('http://127.0.0.1:8000/api/books/search', {
+        var response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/books/search', {
           params: { query: this.searchQuery },
           headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' },
         })
@@ -281,7 +281,7 @@ export default {
     async loadSessionMessages(sessionId) {
       try {
         var token = localStorage.getItem('token')
-        var response = await axios.get('http://127.0.0.1:8000/api/chat/session/' + sessionId, {
+        var response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/chat/session/' + sessionId, {
           headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' },
         })
         this.currentSessionId = sessionId
@@ -310,7 +310,7 @@ export default {
       try {
         var token = localStorage.getItem('token')
         var response = await axios.post(
-          'http://127.0.0.1:8000/api/chat',
+          'https://colris-chatbot-backend-production.up.railway.app/api/chat',
           { message: userText, session_id: this.currentSessionId },
           { headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' } },
         )
