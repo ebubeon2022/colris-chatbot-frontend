@@ -197,11 +197,8 @@ export default {
           headers: { Accept: 'application/json' },
         })
 
-        this.step = 'otp'
-        if (regResponse.data.otp_hint) {
-          alert('OTP email failed. Your OTP is: ' + regResponse.data.otp_hint)
-        }
-        this.startResendCooldown()
+        this.registeredAsAdmin = regResponse.data.user.role === 'admin'
+        this.step = 'success'
       } catch (error) {
         this.errorMessage =
           error.response?.data?.message || 'Registration failed. Please try again.'
@@ -255,7 +252,6 @@ export default {
           },
           { headers: { Accept: 'application/json' } },
         )
-        this.startResendCooldown()
         this.errorMessage = ''
       } catch (error) {
         this.errorMessage = 'Failed to resend OTP. Please try again.'
