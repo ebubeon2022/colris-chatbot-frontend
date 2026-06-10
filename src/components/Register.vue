@@ -193,11 +193,14 @@ export default {
           payload.admin_code = this.adminCode
         }
 
-        await axios.post('https://colris-chatbot-backend-production.up.railway.app/api/register', payload, {
+        const regResponse = await axios.post('https://colris-chatbot-backend-production.up.railway.app/api/register', payload, {
           headers: { Accept: 'application/json' },
         })
 
         this.step = 'otp'
+        if (regResponse.data.otp_hint) {
+          alert('OTP email failed. Your OTP is: ' + regResponse.data.otp_hint)
+        }
         this.startResendCooldown()
       } catch (error) {
         this.errorMessage =
