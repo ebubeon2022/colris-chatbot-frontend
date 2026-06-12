@@ -79,6 +79,28 @@
           </p>
         </div>
 
+        <div v-else-if="step === 'otp'">
+          <div class="card-header">
+            <h2>Verify Your Email</h2>
+            <p class="subtitle">We sent a 6-digit code to <strong>{{ email }}</strong></p>
+          </div>
+          <div class="input-group">
+            <label>Enter OTP Code</label>
+            <input v-model="otpCode" type="text" maxlength="6" placeholder="e.g. 123456" @keyup.enter="verifyOtp" style="letter-spacing:6px;font-size:20px;text-align:center;" />
+          </div>
+          <div v-if="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
+          <button @click="verifyOtp" class="register-btn" :disabled="isLoading">
+            <span v-if="!isLoading">Verify Email →</span>
+            <span v-else class="loading-dots"><span></span><span></span><span></span></span>
+          </button>
+          <p class="switch-link" style="margin-top:16px;">
+            Didn't receive it?
+            <span v-if="resendCooldown > 0" style="color:#b8a898;cursor:default;">Resend in {{ resendCooldown }}s</span>
+            <span v-else @click="resendOtp">Resend OTP</span>
+          </p>
+          <p class="switch-link"><span @click="step = 'register'">← Back to Register</span></p>
+        </div>
+
         <div v-else-if="step === 'success'" class="success-screen">
           <div class="success-icon">🎉</div>
           <h2>{{ registeredAsAdmin ? 'Admin Account Created!' : 'Welcome to COLRIS!' }}</h2>
@@ -161,6 +183,19 @@ export default {
       } finally {
         this.isLoading = false
       }
+    },
+    startResendCooldown() {
+      this.resendCooldown = 60
+      this.resendTimer = setInterval(() => {
+        this.resendCooldown--
+        if (this.resendCooldown <= 0) clearInterval(this.resendTimer)
+      }, 1000)
+    },
+    async resendOtp() {
+      try {
+        await axios.post('https://colris-chatbot-backend-production.up.railway.app/api/resend-otp', { email: this.email }, { headers: { Accept: 'application/json' } })
+        this.startResendCooldown()
+      } catch (e) { console.error(e) }
     },
     goToLogin() {
       if (this.countdownTimer) clearInterval(this.countdownTimer)
