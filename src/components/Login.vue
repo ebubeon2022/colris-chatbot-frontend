@@ -27,16 +27,20 @@
             placeholder="your@stu.cu.edu.ng"
             @keyup.enter="login"
           />
+            <button type="button" @click="showPassword = !showPassword" class="eye-btn">{{ showPassword ? '🙈' : '👁️' }}</button>
+            </div>
         </div>
 
         <div class="input-group">
           <label>Password</label>
           <input
             v-model="password"
-            type="password"
+            :type="showPassword ? 'text' : 'password'"
             placeholder="Enter your password"
             @keyup.enter="login"
           />
+            <button type="button" @click="showPassword = !showPassword" class="eye-btn">{{ showPassword ? '🙈' : '👁️' }}</button>
+            </div>
         </div>
 
         <div v-if="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
@@ -63,6 +67,7 @@ export default {
     return {
       email: '',
       password: '',
+      showPassword: false,
       errorMessage: '',
       isLoading: false,
     }
@@ -281,4 +286,8 @@ export default {
     width: 100%;
   }
 }
+
+.password-wrapper { position: relative; display: flex; align-items: center; }
+.password-wrapper input { flex: 1; padding-right: 44px; }
+.eye-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 16px; padding: 0; line-height: 1; }
 </style>
