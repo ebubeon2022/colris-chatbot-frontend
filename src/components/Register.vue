@@ -198,7 +198,7 @@ export default {
         })
 
         this.registeredAsAdmin = regResponse.data.user.role === 'admin'
-        this.step = 'success'
+        this.step = 'success'; this.countdown = 5; this.countdownTimer = setInterval(() => { this.countdown--; if (this.countdown <= 0) { this.goToLogin() } }, 1000)
       } catch (error) {
         this.errorMessage =
           error.response?.data?.message || 'Registration failed. Please try again.'
@@ -227,7 +227,7 @@ export default {
         )
 
         this.registeredAsAdmin = response.data.user.role === 'admin'
-        this.step = 'success'
+        this.step = 'success'; this.countdown = 5; this.countdownTimer = setInterval(() => { this.countdown--; if (this.countdown <= 0) { this.goToLogin() } }, 1000)
 
         this.countdown = 5
         this.countdownTimer = setInterval(() => {
