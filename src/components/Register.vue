@@ -164,18 +164,13 @@ export default {
           password_confirmation: this.passwordConfirmation,
         }
         if (this.adminCode) payload.admin_code = this.adminCode
-        const regResponse = await axios.post(
+        await axios.post(
           'https://colris-chatbot-backend-production.up.railway.app/api/register',
           payload,
           { headers: { Accept: 'application/json' } },
         )
-        this.registeredAsAdmin = regResponse.data.user.role === 'admin'
-        this.step = 'success'
-        this.countdown = 5
-        this.countdownTimer = setInterval(() => {
-          this.countdown--
-          if (this.countdown <= 0) this.goToLogin()
-        }, 1000)
+        this.step = 'otp'
+        this.startResendCooldown()
       } catch (error) {
         this.errorMessage = error.response && error.response.data && error.response.data.message
           ? error.response.data.message
