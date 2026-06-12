@@ -38,7 +38,7 @@
               placeholder="Enter your password"
               @keyup.enter="login"
             />
-            <button type="button" @click="showPassword = !showPassword" class="eye-btn">{{ showPassword ? '🙈' : '👁️' }}</button>
+            <button type="button" @click="showPassword = !showPassword" class="eye-btn">{{ showPassword ? 'Hide' : 'Show' }}</button>
           </div>
         </div>
 
@@ -288,5 +288,5 @@ export default {
 
 .password-wrapper { position: relative; display: flex; align-items: center; }
 .password-wrapper input { flex: 1; padding-right: 44px; }
-.eye-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 16px; padding: 0; line-height: 1; }
+.eye-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 12px; font-weight: 600; color: #8b7355; padding: 0; line-height: 1; letter-spacing: 0.5px; }
 </style>

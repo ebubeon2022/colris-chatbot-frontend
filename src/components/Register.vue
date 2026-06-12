@@ -50,7 +50,7 @@
                 placeholder="Create a password (min. 6 characters)"
                 @keyup.enter="register"
               />
-              <button type="button" @click="showPassword = !showPassword" class="eye-btn">{{ showPassword ? '🙈' : '👁️' }}</button>
+              <button type="button" @click="showPassword = !showPassword" class="eye-btn">{{ showPassword ? 'Hide' : 'Show' }}</button>
             </div>
             <div class="pass-hint" v-if="password.length > 0">
               <span :class="password.length >= 6 ? 'pass-ok' : 'pass-warn'">
@@ -68,7 +68,7 @@
                 placeholder="Confirm your password"
                 @keyup.enter="register"
               />
-              <button type="button" @click="showConfirm = !showConfirm" class="eye-btn">{{ showConfirm ? '🙈' : '👁️' }}</button>
+              <button type="button" @click="showConfirm = !showConfirm" class="eye-btn">{{ showConfirm ? 'Hide' : 'Show' }}</button>
             </div>
           </div>
 
@@ -606,7 +606,7 @@ export default {
 
 .password-wrapper { position: relative; display: flex; align-items: center; }
 .password-wrapper input { flex: 1; padding-right: 44px; }
-.eye-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 16px; padding: 0; line-height: 1; }
+.eye-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 12px; font-weight: 600; color: #8b7355; padding: 0; line-height: 1; letter-spacing: 0.5px; }
 .pass-hint { margin-top: 5px; font-size: 12px; }
 .pass-ok { color: #16a34a; font-weight: 600; }
 .pass-warn { color: #dc2626; font-weight: 600; }
