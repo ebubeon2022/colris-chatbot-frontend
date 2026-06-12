@@ -358,7 +358,7 @@ export default {
 }
 
 .register-right {
-  width: 480px;
+  flex: 1;
   background: #faf7f2;
   display: flex;
   align-items: center;
