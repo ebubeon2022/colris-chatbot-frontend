@@ -2,8 +2,8 @@
   <div class="login-container">
     <div class="login-left">
       <div class="brand">
-        <div class="logo-icon">🤖</div>
-        <h1>COLRIS AI</h1>
+        <div class="logo-icon">📚</div>
+        <h1>COLRIS</h1>
         <p>Covenant University Library Assistant</p>
       </div>
       <div class="features">
@@ -16,36 +16,32 @@
 
     <div class="login-right">
       <div class="login-card">
-        <h2>Welcome Back</h2>
-        <p class="subtitle">Sign in to your COLRIS account</p>
+        <div class="card-header">
+          <h2>Welcome Back</h2>
+          <p class="subtitle">Sign in to your COLRIS account</p>
+        </div>
 
         <div class="input-group">
           <label>Email Address</label>
-          <input
-            v-model="email"
-            type="email"
-            placeholder="your@stu.cu.edu.ng"
-            @keyup.enter="login"
-          />
+          <input v-model="email" type="email" placeholder="your@stu.cu.edu.ng" @keyup.enter="login" />
         </div>
 
         <div class="input-group">
           <label>Password</label>
           <div class="password-wrapper">
-            <input
-              v-model="password"
-              :type="showPassword ? 'text' : 'password'"
-              placeholder="Enter your password"
-              @keyup.enter="login"
-            />
-            <button type="button" @click="showPassword = !showPassword" class="eye-btn"><span v-if="showPassword"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></span><span v-else><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
+            <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Enter your password" @keyup.enter="login" />
+            <button type="button" @click="showPassword = !showPassword" class="eye-btn">
+              <span v-if="showPassword"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></span>
+              <span v-else><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            </button>
           </div>
         </div>
 
         <div v-if="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
 
         <button @click="login" class="login-btn" :disabled="isLoading">
-          {{ isLoading ? 'Signing in...' : 'Sign In →' }}
+          <span v-if="!isLoading">Sign In →</span>
+          <span v-else class="loading-dots"><span></span><span></span><span></span></span>
         </button>
 
         <p class="switch-link">
@@ -58,7 +54,6 @@
 
 <script>
 import axios from 'axios'
-
 export default {
   name: 'Login',
   emits: ['login-success', 'show-register'],
@@ -78,10 +73,7 @@ export default {
       try {
         const response = await axios.post(
           'https://colris-chatbot-backend-production.up.railway.app/api/login',
-          {
-            email: this.email,
-            password: this.password,
-          },
+          { email: this.email, password: this.password },
           { headers: { Accept: 'application/json' } },
         )
         localStorage.setItem('token', response.data.token)
@@ -98,75 +90,124 @@ export default {
 </script>
 
 <style scoped>
+* { box-sizing: border-box; }
+
 .login-container {
   min-height: 100vh;
   display: flex;
   font-family: 'Segoe UI', Arial, sans-serif;
+  animation: fadeIn 0.5s ease;
 }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .login-left {
   flex: 1;
-  background: linear-gradient(160deg, #0d1b3e 0%, #1e3a6e 60%, #1e6fd9 100%);
+  background: linear-gradient(160deg, #2c1810 0%, #5c3d2e 60%, #8b5e3c 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 60px;
   color: white;
+  position: relative;
+  overflow: hidden;
 }
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: -120px; right: -120px;
+  width: 420px; height: 420px;
+  background: rgba(201, 168, 76, 0.08);
+  border-radius: 50%;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.login-left::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -80px;
+  width: 300px; height: 300px;
+  background: rgba(201, 168, 76, 0.06);
+  border-radius: 50%;
+  animation: pulse 4s ease-in-out infinite reverse;
+}
+
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.08); opacity: 0.7; } }
 
 .brand {
   margin-bottom: 48px;
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.6s ease both;
 }
 
+@keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
 .logo-icon {
-  font-size: 48px;
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
+  font-size: 36px;
+  width: 72px; height: 72px;
+  background: rgba(201, 168, 76, 0.2);
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
+
+.logo-icon:hover { transform: scale(1.08) rotate(-3deg); box-shadow: 0 8px 30px rgba(201, 168, 76, 0.25); }
 
 .brand h1 {
-  font-size: 36px;
+  font-size: 38px;
   font-weight: 800;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   margin: 0 0 8px;
-  color: #f5f0e8;
+  color: #fdf6e3;
 }
 
-.brand p {
-  font-size: 15px;
-  color: rgba(245, 240, 232, 0.6);
-  margin: 0;
-}
+.brand p { font-size: 14px; color: rgba(253, 246, 227, 0.65); margin: 0; }
 
 .features {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .feature {
-  font-size: 15px;
-  color: rgba(245, 240, 232, 0.8);
+  font-size: 14px;
+  color: rgba(253, 246, 227, 0.85);
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px 18px;
   background: rgba(255, 255, 255, 0.07);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  transition: all 0.25s ease;
+  cursor: default;
+  animation: slideUp 0.6s ease both;
+}
+
+.feature:nth-child(1) { animation-delay: 0.1s; }
+.feature:nth-child(2) { animation-delay: 0.2s; }
+.feature:nth-child(3) { animation-delay: 0.3s; }
+.feature:nth-child(4) { animation-delay: 0.4s; }
+
+.feature:hover {
+  background: rgba(201, 168, 76, 0.12);
+  border-color: rgba(201, 168, 76, 0.35);
+  transform: translateX(8px);
+  color: #fdf6e3;
 }
 
 .login-right {
-  width: 480px;
-  background: #f5f0e8;
+  flex: 1;
+  background: #faf7f2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,55 +216,75 @@ export default {
 
 .login-card {
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 8px 40px rgba(92, 61, 46, 0.1);
+  border: 1px solid #f0e8dc;
+  animation: slideUp 0.5s ease both;
+  transition: box-shadow 0.3s;
 }
+
+.login-card:hover { box-shadow: 0 16px 56px rgba(92, 61, 46, 0.15); }
+
+.card-header { margin-bottom: 32px; }
 
 .login-card h2 {
-  color: #0d1b3e;
-  font-size: 28px;
+  color: #2c1810;
+  font-size: 26px;
   font-weight: 800;
   margin: 0 0 6px;
+  font-family: 'Georgia', serif;
 }
 
-.subtitle {
-  color: #6b7280;
-  font-size: 14px;
-  margin: 0 0 32px;
-}
+.subtitle { color: #8b7355; font-size: 14px; margin: 0; }
 
-.input-group {
-  margin-bottom: 20px;
-}
+.input-group { margin-bottom: 20px; }
 
 .input-group label {
   display: block;
-  color: #0d1b3e;
+  color: #5c3d2e;
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 8px;
+  transition: color 0.2s;
 }
+
+.input-group:focus-within label { color: #c9a84c; }
 
 .input-group input {
   width: 100%;
-  padding: 14px 18px;
-  background: white;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 12px;
-  color: #0d1b3e;
+  padding: 13px 16px;
+  background: #faf7f2;
+  border: 1.5px solid #e8dcc8;
+  border-radius: 10px;
+  color: #2c1810;
   font-size: 14px;
   outline: none;
-  transition: all 0.2s;
-  box-sizing: border-box;
+  transition: all 0.25s ease;
 }
 
-.input-group input::placeholder {
-  color: #adb5bd;
-}
+.input-group input::placeholder { color: #c4b49a; }
 
 .input-group input:focus {
-  border-color: #1e6fd9;
-  box-shadow: 0 0 0 3px rgba(30, 111, 217, 0.12);
+  border-color: #c9a84c;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+  transform: translateY(-1px);
 }
+
+.password-wrapper { position: relative; display: flex; align-items: center; }
+.password-wrapper input { flex: 1; padding-right: 44px; }
+
+.eye-btn {
+  position: absolute; right: 12px;
+  background: none; border: none;
+  cursor: pointer; color: #8b7355;
+  padding: 0; display: flex; align-items: center;
+  transition: color 0.2s, transform 0.2s;
+}
+.eye-btn:hover { color: #5c3d2e; transform: scale(1.15); }
 
 .error-message {
   background: #fef2f2;
@@ -233,60 +294,90 @@ export default {
   border-radius: 10px;
   font-size: 13px;
   margin-bottom: 16px;
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
 }
 
 .login-btn {
   width: 100%;
-  padding: 15px;
-  background: linear-gradient(135deg, #0d1b3e, #1e6fd9);
-  color: #f5f0e8;
+  padding: 14px;
+  background: linear-gradient(135deg, #5c3d2e 0%, #8b5e3c 100%);
+  color: #fdf6e3;
   border: none;
   border-radius: 12px;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 16px rgba(13, 27, 62, 0.2);
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 16px rgba(92, 61, 46, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  position: relative;
+  overflow: hidden;
 }
+
+.login-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.4s ease;
+}
+
+.login-btn:hover::before { left: 100%; }
 
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(13, 27, 62, 0.3);
+  box-shadow: 0 8px 28px rgba(92, 61, 46, 0.35);
+  background: linear-gradient(135deg, #2c1810 0%, #5c3d2e 100%);
 }
 
-.login-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+.login-btn:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(92, 61, 46, 0.2); }
+
+.login-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.loading-dots { display: flex; gap: 5px; align-items: center; }
+.loading-dots span {
+  width: 7px; height: 7px;
+  background: #fdf6e3;
+  border-radius: 50%;
+  animation: bounce 1.2s infinite ease-in-out;
 }
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
 
 .switch-link {
   text-align: center;
-  color: #6b7280;
+  color: #8b7355;
   font-size: 13px;
   margin: 20px 0 0;
 }
 
 .switch-link span {
-  color: #1e6fd9;
+  color: #8b5e3c;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  transition: color 0.2s;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.switch-link span:hover {
-  text-decoration: underline;
-}
+.switch-link span:hover { color: #5c3d2e; }
 
 @media (max-width: 768px) {
-  .login-left {
-    display: none;
-  }
-  .login-right {
-    width: 100%;
-  }
+  .login-left { display: none; }
+  .login-right { width: 100%; }
+  .login-card { padding: 28px 20px; }
 }
-
-.password-wrapper { position: relative; display: flex; align-items: center; }
-.password-wrapper input { flex: 1; padding-right: 44px; }
-.eye-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 12px; font-weight: 600; color: #8b7355; padding: 0; line-height: 1; letter-spacing: 0.5px; }
 </style>
