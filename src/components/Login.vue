@@ -27,20 +27,19 @@
             placeholder="your@stu.cu.edu.ng"
             @keyup.enter="login"
           />
-            <button type="button" @click="showPassword = !showPassword" class="eye-btn">{{ showPassword ? '🙈' : '👁️' }}</button>
-            </div>
         </div>
 
         <div class="input-group">
           <label>Password</label>
-          <input
-            v-model="password"
-            :type="showPassword ? 'text' : 'password'"
-            placeholder="Enter your password"
-            @keyup.enter="login"
-          />
+          <div class="password-wrapper">
+            <input
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              placeholder="Enter your password"
+              @keyup.enter="login"
+            />
             <button type="button" @click="showPassword = !showPassword" class="eye-btn">{{ showPassword ? '🙈' : '👁️' }}</button>
-            </div>
+          </div>
         </div>
 
         <div v-if="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
