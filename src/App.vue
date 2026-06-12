@@ -183,153 +183,164 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(44, 24, 16, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 10;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
 }
 
 .sidebar {
   position: fixed;
   top: 0;
-  left: -280px;
-  width: 270px;
+  left: -300px;
+  width: 280px;
   height: 100vh;
-  background: #2c1810;
+  background: #0f0805;
   display: flex;
   flex-direction: column;
   z-index: 20;
-  transition: left 0.3s ease;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   color: #faf7f2;
-  box-shadow: 4px 0 24px rgba(44, 24, 16, 0.4);
+  box-shadow: 8px 0 40px rgba(0, 0, 0, 0.5);
 }
 .sidebar.open {
   left: 0;
 }
 
 .sidebar-header {
-  padding: 20px 16px;
-  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  padding: 20px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: #1a0f0a;
 }
 
 .sidebar-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .logo-icon {
-  font-size: 24px;
+  font-size: 22px;
   background: rgba(201, 168, 76, 0.15);
-  border: 1px solid rgba(201, 168, 76, 0.3);
+  border: 1px solid rgba(201, 168, 76, 0.25);
   border-radius: 10px;
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.3s;
 }
+.logo-icon:hover { transform: rotate(-5deg) scale(1.08); }
 
 .sidebar-header h2 {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #c9a84c;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #ffffff;
   font-family: 'Georgia', serif;
 }
 
 .sidebar-header p {
-  font-size: 11px;
-  color: rgba(250, 247, 242, 0.4);
-  margin-top: 1px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 2px;
+  letter-spacing: 0.3px;
 }
 
 .close-btn {
   background: transparent;
   border: none;
-  color: rgba(250, 247, 242, 0.4);
-  font-size: 16px;
+  color: rgba(255,255,255,0.3);
+  font-size: 18px;
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 6px;
+  transition: all 0.2s;
+  line-height: 1;
 }
 .close-btn:hover {
-  background: rgba(250, 247, 242, 0.08);
-  color: #faf7f2;
+  background: rgba(255,255,255,0.07);
+  color: white;
 }
 
 .new-chat-btn {
   width: 100%;
-  background: rgba(201, 168, 76, 0.12);
-  border: 1px solid rgba(201, 168, 76, 0.3);
-  color: #c9a84c;
-  padding: 10px;
+  background: #c9a84c;
+  border: none;
+  color: #1a0f0a;
+  padding: 11px 14px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  text-align: left;
-  transition: all 0.2s;
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-align: center;
+  transition: all 0.25s;
   font-family: 'Segoe UI', Arial, sans-serif;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 12px rgba(201,168,76,0.3);
 }
 .new-chat-btn:hover {
-  background: rgba(201, 168, 76, 0.2);
+  background: #b8960a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(201,168,76,0.4);
 }
 
 .sidebar-history {
   flex: 1;
   overflow-y: auto;
-  padding: 12px 8px;
+  padding: 16px 12px;
 }
 .sidebar-history::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 .sidebar-history::-webkit-scrollbar-thumb {
-  background: rgba(201, 168, 76, 0.2);
+  background: rgba(255,255,255,0.08);
   border-radius: 4px;
 }
 
 .history-label {
   font-size: 10px;
-  color: rgba(250, 247, 242, 0.3);
+  color: rgba(255,255,255,0.25);
   text-transform: uppercase;
   padding: 0 8px;
-  margin-bottom: 8px;
-  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
   font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 .history-loading,
 .history-empty {
   font-size: 13px;
-  color: rgba(250, 247, 242, 0.3);
-  padding: 12px 8px;
+  color: rgba(255,255,255,0.25);
+  padding: 16px 8px;
   font-family: 'Segoe UI', Arial, sans-serif;
+  text-align: center;
 }
 
 .history-item {
   padding: 10px 12px;
   border-radius: 8px;
   cursor: pointer;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   transition: all 0.2s;
   border: 1px solid transparent;
 }
 .history-item:hover {
-  background: rgba(201, 168, 76, 0.1);
-  border-color: rgba(201, 168, 76, 0.2);
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.08);
 }
 .history-item.active {
-  background: rgba(201, 168, 76, 0.15);
-  border-color: rgba(201, 168, 76, 0.3);
+  background: rgba(201,168,76,0.12);
+  border-color: rgba(201,168,76,0.25);
 }
 
 .history-message {
   font-size: 13px;
-  color: rgba(250, 247, 242, 0.7);
+  color: rgba(255,255,255,0.65);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -339,34 +350,38 @@ body {
 
 .history-meta {
   font-size: 11px;
-  color: rgba(250, 247, 242, 0.3);
+  color: rgba(255,255,255,0.25);
   font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 .sidebar-footer {
   padding: 16px;
-  border-top: 1px solid rgba(201, 168, 76, 0.15);
+  border-top: 1px solid rgba(255,255,255,0.06);
   display: flex;
   flex-direction: column;
   gap: 10px;
+  background: #1a0f0a;
 }
 
 .admin-btn {
   width: 100%;
-  background: rgba(201, 168, 76, 0.12);
-  border: 1px solid rgba(201, 168, 76, 0.3);
+  background: transparent;
+  border: 1px solid rgba(201,168,76,0.25);
   color: #c9a84c;
-  padding: 10px;
+  padding: 10px 14px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   text-align: left;
   transition: all 0.2s;
   font-family: 'Segoe UI', Arial, sans-serif;
+  letter-spacing: 0.3px;
 }
 .admin-btn:hover {
-  background: rgba(201, 168, 76, 0.2);
+  background: #c9a84c;
+  color: #1a0f0a;
+  border-color: #c9a84c;
 }
 
 .user-info {
@@ -374,7 +389,7 @@ body {
   align-items: center;
   justify-content: space-between;
   font-size: 13px;
-  color: rgba(250, 247, 242, 0.5);
+  color: rgba(255,255,255,0.4);
   font-family: 'Segoe UI', Arial, sans-serif;
 }
 
@@ -387,15 +402,16 @@ body {
 .user-dot {
   width: 8px;
   height: 8px;
-  background: #c9a84c;
+  background: #22c55e;
   border-radius: 50%;
+  box-shadow: 0 0 6px rgba(34,197,94,0.5);
 }
 
 .logout-btn {
   background: transparent;
-  border: 1px solid rgba(250, 247, 242, 0.15);
-  color: rgba(250, 247, 242, 0.5);
-  padding: 4px 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.4);
+  padding: 5px 12px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 12px;
@@ -403,8 +419,9 @@ body {
   font-family: 'Segoe UI', Arial, sans-serif;
 }
 .logout-btn:hover {
-  background: rgba(250, 247, 242, 0.08);
-  color: #faf7f2;
+  background: rgba(220,38,38,0.15);
+  border-color: rgba(220,38,38,0.3);
+  color: #ef4444;
 }
 
 .main-area {
