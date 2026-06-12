@@ -189,17 +189,14 @@
               </select>
             </div>
             <div class="input-group">
-              <label>Question (optional)</label>
-              <input v-model="knowledgeForm.question" type="text" placeholder="e.g. How many floors does the library have?" />
-            </div>
-            <div class="input-group">
-              <label>Answer / Fact</label>
-              <textarea v-model="knowledgeForm.answer" rows="4" placeholder="e.g. The library has 4 floors..."></textarea>
+              <label>What should the AI know?</label>
+              <p style="color:#8b7355;font-size:12px;margin:0 0 8px;">Write anything in plain English — facts, policies, hours, contacts, etc.</p>
+              <textarea v-model="knowledgeForm.answer" rows="8" placeholder="e.g. The library has 4 floors. The ground floor has fiction books. The first floor has academic textbooks. The second floor is a quiet study area. Late returns attract a fine of N50 per day per book."></textarea>
             </div>
           </div>
           <div class="modal-actions">
             <button @click="cancelKnowledge" class="cancel-btn">Cancel</button>
-            <button @click="saveKnowledge" class="save-btn" :disabled="isSavingKnowledge">{{ isSavingKnowledge ? 'Saving...' : editingKnowledge ? 'Update' : 'Add' }}</button>
+            <button @click="saveKnowledge" class="save-btn" :disabled="isSavingKnowledge">{{ isSavingKnowledge ? 'Saving...' : editingKnowledge ? 'Update' : 'Save' }}</button>
           </div>
         </div>
       </div>
