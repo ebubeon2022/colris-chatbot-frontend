@@ -194,7 +194,7 @@ body {
   left: -300px;
   width: 280px;
   height: 100vh;
-  background: #0f0805;
+  background: #1e1410;
   display: flex;
   flex-direction: column;
   z-index: 20;
@@ -212,7 +212,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #1a0f0a;
+  background: #2c1810;
 }
 
 .sidebar-logo {
@@ -253,7 +253,7 @@ body {
 .close-btn {
   background: transparent;
   border: none;
-  color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.5);
   font-size: 18px;
   cursor: pointer;
   padding: 4px 8px;
@@ -304,7 +304,7 @@ body {
 
 .history-label {
   font-size: 10px;
-  color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.45);
   text-transform: uppercase;
   padding: 0 8px;
   margin-bottom: 10px;
@@ -315,7 +315,7 @@ body {
 .history-loading,
 .history-empty {
   font-size: 13px;
-  color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.45);
   padding: 16px 8px;
   font-family: 'Segoe UI', Arial, sans-serif;
   text-align: center;
@@ -340,7 +340,7 @@ body {
 
 .history-message {
   font-size: 13px;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.82);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -350,7 +350,7 @@ body {
 
 .history-meta {
   font-size: 11px;
-  color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.45);
   font-family: 'Segoe UI', Arial, sans-serif;
 }
 
@@ -360,7 +360,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: #1a0f0a;
+  background: #2c1810;
 }
 
 .admin-btn {
@@ -389,7 +389,7 @@ body {
   align-items: center;
   justify-content: space-between;
   font-size: 13px;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.6);
   font-family: 'Segoe UI', Arial, sans-serif;
 }
 
@@ -410,7 +410,7 @@ body {
 .logout-btn {
   background: transparent;
   border: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.6);
   padding: 5px 12px;
   border-radius: 6px;
   cursor: pointer;
