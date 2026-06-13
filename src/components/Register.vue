@@ -179,6 +179,32 @@ export default {
         this.isLoading = false
       }
     },
+    async verifyOtp() {
+      this.errorMessage = ''
+      if (!this.otpCode || this.otpCode.length !== 6) {
+        this.errorMessage = 'Please enter the 6-digit code.'
+        return
+      }
+      this.isLoading = true
+      try {
+        const response = await axios.post(
+          'https://colris-chatbot-backend-production.up.railway.app/api/verify-otp',
+          { email: this.email, otp: this.otpCode },
+          { headers: { Accept: 'application/json' } }
+        )
+        this.registeredAsAdmin = response.data.user.role === 'admin'
+        this.step = 'success'
+        this.countdown = 5
+        this.countdownTimer = setInterval(() => {
+          this.countdown--
+          if (this.countdown <= 0) this.goToLogin()
+        }, 1000)
+      } catch (error) {
+        this.errorMessage = error.response && error.response.data ? error.response.data.message : 'Invalid OTP.'
+      } finally {
+        this.isLoading = false
+      }
+    },
     startResendCooldown() {
       this.resendCooldown = 60
       this.resendTimer = setInterval(() => {
