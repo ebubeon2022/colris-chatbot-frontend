@@ -108,7 +108,25 @@
       </div>
       <div v-for="(message, index) in messages" :key="index" :class="['message', message.sender]">
         <div class="message-avatar" v-if="message.sender === 'bot'">📚</div>
-        <div class="message-bubble" v-html="formatMessage(message.text)"></div>
+        <div style="display:flex;flex-direction:column;gap:8px;max-width:72%;">
+          <div class="message-bubble" v-html="formatMessage(message.text)"></div>
+          <div v-if="message.isFallback" class="handoff-card">
+            <p class="handoff-title">🧑‍💼 Need more help?</p>
+            <p class="handoff-sub">A librarian can assist you directly.</p>
+            <div class="handoff-actions">
+              <a href="mailto:library@covenantuniversity.edu.ng?subject=Library%20Enquiry&body=Hello%2C%20I%20need%20help%20with%20the%20following%3A%20" class="handoff-btn primary">✉️ Contact a Librarian</a>
+            </div>
+            <div class="handoff-suggestions">
+              <p class="suggestions-label">Or try one of these:</p>
+              <div class="suggestion-chips">
+                <button @click="quickAsk('What are the library opening hours?')" class="chip">🕐 Library Hours</button>
+                <button @click="quickAsk('How do I borrow a book?')" class="chip">📖 Borrowing</button>
+                <button @click="quickAsk('What is the fine for late returns?')" class="chip">💰 Fines</button>
+                <button @click="quickAsk('What databases are available?')" class="chip">🗄️ Databases</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="message-avatar user-avatar" v-if="message.sender === 'user'">👤</div>
       </div>
       <div v-if="isLoading" class="message bot">
@@ -318,7 +336,7 @@ export default {
           this.currentSessionId = response.data.session_id
           this.$emit('new-session', this.currentSessionId)
         }
-        this.messages.push({ sender: 'bot', text: response.data.reply })
+        this.messages.push({ sender: 'bot', text: response.data.reply, isFallback: response.data.is_fallback || false })
       } catch (error) {
         this.messages.push({ sender: 'bot', text: 'Sorry, I am having trouble connecting. Please try again.' })
       } finally {
@@ -452,6 +470,17 @@ export default {
 .message-bubble :deep(.list-item) { display: flex; gap: 10px; margin: 8px 0; padding: 8px 12px; background: #fdf6e3; border-radius: 8px; border-left: 3px solid #c9a84c; }
 .message-bubble :deep(.list-number) { background: #1a0f0a; color: #c9a84c; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
 .message-bubble :deep(.bullet-item) { margin: 6px 0; padding-left: 8px; color: #1a0f0a; }
+
+.handoff-card { background: white; border: 1.5px solid #c9a84c; border-radius: 14px; padding: 16px; box-shadow: 0 4px 16px rgba(201,168,76,0.15); animation: msgIn 0.3s ease; }
+.handoff-title { color: #1a0f0a; font-size: 14px; font-weight: 700; margin: 0 0 4px; }
+.handoff-sub { color: #8b7355; font-size: 13px; margin: 0 0 14px; }
+.handoff-actions { margin-bottom: 14px; }
+.handoff-btn.primary { display: inline-block; background: #1a0f0a; color: #fdf6e3; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; transition: all 0.25s; }
+.handoff-btn.primary:hover { background: #2c1810; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.suggestions-label { color: #8b7355; font-size: 12px; font-weight: 600; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.suggestion-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: #fdf6e3; border: 1.5px solid #e8dcc8; color: #2c1810; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.chip:hover { background: #c9a84c; color: white; border-color: #c9a84c; transform: translateY(-1px); }
 .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 14px 18px !important; }
 .typing-indicator span { width: 8px; height: 8px; background: #c9a84c; border-radius: 50%; animation: bounce 1.2s infinite ease-in-out; }
 .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
