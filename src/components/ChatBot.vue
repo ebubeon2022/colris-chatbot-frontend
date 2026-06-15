@@ -402,7 +402,7 @@ export default {
     async openBookRequest() {
       this.messages.push({
         sender: 'bot',
-        text: '📚 <strong>Request a Book</strong><br><br>Type your request in the chat box below using this format:<br><br><strong>REQUEST: Book Title by Author - Reason you need it</strong><br><br>Example: REQUEST: Clean Code by Robert Martin - For my software engineering project',
+        text: '📚 **Request a Book**\n\nType your request in the chat box below using this format:\n\nREQUEST: Book Title by Author - Reason you need it\n\nExample: REQUEST: Clean Code by Robert Martin - For my software engineering project',
         isFallback: false
       })
       this.$nextTick(() => {
