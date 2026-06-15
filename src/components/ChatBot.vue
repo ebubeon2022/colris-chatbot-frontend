@@ -412,7 +412,7 @@ export default {
     openCitation() {
       this.messages.push({
         sender: 'bot',
-        text: '📝 <strong>Citation Generator</strong><br><br>Type your book details in the chat box using this format:<br><br><strong>CITE: Author | Title | Year | Publisher | Style</strong><br><br>Style can be APA, MLA, or Harvard<br>Example: CITE: Smith, J. | Introduction to Computing | 2023 | Pearson | APA',
+        text: '📝 **Citation Generator**\n\nType your book details in the chat box using this format:\n\nCITE: Author | Title | Year | Publisher | Style\n\nStyle can be APA, MLA, or Harvard\nExample: CITE: Smith, J. | Introduction to Computing | 2023 | Pearson | APA',
         isFallback: false
       })
       this.$nextTick(() => {
@@ -433,11 +433,11 @@ export default {
           let text = '📋 <strong>Your Book Requests:</strong><br><br>'
           reqs.forEach(function(r, i) {
             const color = r.status === 'approved' ? '#16a34a' : r.status === 'rejected' ? '#dc2626' : '#92400e'
-            text += (i+1) + '. <strong>' + r.title + '</strong>'
+            text += (i+1) + '. **' + r.title + '**'
             if (r.author) text += ' by ' + r.author
-            text += ' — <span style="color:' + color + '">' + r.status.toUpperCase() + '</span>'
-            if (r.admin_note) text += '<br>   Note: ' + r.admin_note
-            text += '<br>'
+            text += ' — ' + r.status.toUpperCase()
+            if (r.admin_note) text += '\n   Note: ' + r.admin_note
+            text += '\n'
           })
           this.messages.push({ sender: 'bot', text: text, isFallback: false })
         }
@@ -573,7 +573,7 @@ export default {
             body: JSON.stringify({ title: title, author: author, reason: reason })
           })
           if (res.ok) {
-            this.messages.push({ sender: 'bot', text: 'Your book request for <strong>' + title + '</strong> has been submitted! The librarian will review it.', isFallback: false })
+            this.messages.push({ sender: 'bot', text: 'Your book request for **' + title + '** has been submitted! The librarian will review it.', isFallback: false })
           } else {
             this.messages.push({ sender: 'bot', text: 'Could not submit request. Please try again.', isFallback: false })
           }
@@ -595,7 +595,7 @@ export default {
         if (style === 'APA') citation = author + ' (' + year + '). ' + title + '. ' + publisher + '.'
         else if (style === 'MLA') citation = author + '. "' + title + '." ' + publisher + ', ' + year + '.'
         else citation = author + ' ' + year + ', ' + title + ', ' + publisher + '.'
-        this.messages.push({ sender: 'bot', text: '<strong>' + style + ' Citation:</strong><br><br><em>' + citation + '</em>', isFallback: false })
+        this.messages.push({ sender: 'bot', text: '📝 **' + style + ' Citation:**\n\n' + citation, isFallback: false })
         return
       }
       var msg = this.userInput.toLowerCase()
