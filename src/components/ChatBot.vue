@@ -168,10 +168,18 @@
         <div style="display:flex;flex-direction:column;gap:8px;max-width:85%;">
           <div class="message-bubble" v-html="formatMessage(message.text)"></div>
           <div v-if="message.sender === 'bot' && !message.isFallback" class="message-actions">
-            <button @click="thumbs(index, 'up')" :class="['action-btn', message.feedback === 'up' ? 'active-up' : '']" title="Helpful">👍</button>
-            <button @click="thumbs(index, 'down')" :class="['action-btn', message.feedback === 'down' ? 'active-down' : '']" title="Not helpful">👎</button>
-            <button @click="saveAnswer(message.text)" class="action-btn" title="Save answer">🔖</button>
-            <button v-if="message.text && message.text.includes('colris.covenantuniversity.edu.ng')" @click="shareLink(message.text)" class="action-btn" title="Share COLRIS link">🔗</button>
+            <button @click="thumbs(index, 'up')" :class="['action-btn', message.feedback === 'up' ? 'active-up' : '']" title="Helpful">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+            </button>
+            <button @click="thumbs(index, 'down')" :class="['action-btn', message.feedback === 'down' ? 'active-down' : '']" title="Not helpful">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
+            </button>
+            <button @click="saveAnswer(message.text)" class="action-btn" title="Save answer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button v-if="message.text && message.text.includes('colris.covenantuniversity.edu.ng')" @click="shareLink(message.text)" class="action-btn" title="Copy COLRIS link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
           </div>
           <div v-if="message.isFallback" class="handoff-card">
             <p class="handoff-title">🧑‍💼 Need more help?</p>
@@ -399,10 +407,21 @@ export default {
       var encoded = encodeURIComponent(title)
       return 'https://colris.covenantuniversity.edu.ng/discovery/search?query=any,contains,' + encoded + '&tab=Everything&search_scope=MyInst_and_CI&vid=234COU_INST:VU1&lang=en&offset=0'
     },
-    thumbs(index, type) {
+    async thumbs(index, type) {
       const msg = this.messages[index]
-      this.messages[index] = Object.assign({}, msg, { feedback: msg.feedback === type ? null : type })
-      this.$set ? this.$set(this.messages, index, this.messages[index]) : (this.messages = [...this.messages])
+      const newFeedback = msg.feedback === type ? null : type
+      this.messages[index] = Object.assign({}, msg, { feedback: newFeedback })
+      this.messages = [...this.messages]
+      if (newFeedback) {
+        try {
+          const token = localStorage.getItem('token')
+          await fetch('https://colris-chatbot-backend-production.up.railway.app/api/chat/feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ session_id: this.sessionId, message_index: index, feedback: newFeedback })
+          })
+        } catch (e) { console.error(e) }
+      }
     },
     saveAnswer(text) {
       const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -822,8 +841,8 @@ export default {
 .req-date { font-size: 11px; color: #b8a898; }
 .req-note { margin-top: 6px; font-size: 12px; color: #5c3d2e; background: #fdf6e3; padding: 6px 10px; border-radius: 6px; }
 .message-actions { display: flex; gap: 6px; margin-top: 4px; }
-.action-btn { background: white; border: 1px solid #e8dcc8; color: #8b7355; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; padding: 0; }
-.action-btn:hover { border-color: #c9a84c; background: #fdf6e3; transform: scale(1.1); }
+.action-btn { background: transparent; border: 1px solid #e0d8cc; color: #a09080; width: 26px; height: 26px; border-radius: 6px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; padding: 0; }
+.action-btn:hover { border-color: #c9a84c; background: #fdf6e3; color: #5c3d2e; }
 .active-up { background: #f0fdf4; border-color: #16a34a; }
 .active-down { background: #fef2f2; border-color: #dc2626; }
 .save-toggle-btn { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.35); color: #c9a84c; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
