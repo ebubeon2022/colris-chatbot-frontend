@@ -430,7 +430,7 @@ export default {
         if (reqs.length === 0) {
           this.messages.push({ sender: 'bot', text: 'You have no book requests yet. Click <strong>Request Book</strong> to submit one!', isFallback: false })
         } else {
-          let text = '📋 <strong>Your Book Requests:</strong><br><br>'
+          let text = '📋 **Your Book Requests:**\n\n'
           reqs.forEach(function(r, i) {
             const color = r.status === 'approved' ? '#16a34a' : r.status === 'rejected' ? '#dc2626' : '#92400e'
             text += (i+1) + '. **' + r.title + '**'
