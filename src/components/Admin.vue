@@ -17,6 +17,7 @@
         <button @click="activeTab = 'users'" :class="{ active: activeTab === 'users' }">Users</button>
         <button @click="activeTab = 'logs'" :class="{ active: activeTab === 'logs' }">Conversation Logs</button>
         <button @click="activeTab = 'requests'; loadBookRequests()" :class="{ active: activeTab === 'requests' }">Book Requests</button>
+        <button @click="activeTab = 'feedback'; loadFeedback()" :class="{ active: activeTab === 'feedback' }">Feedback</button>
       </div>
     </div>
 
@@ -395,6 +396,47 @@
       </div>
     </div>
 
+    <div v-if="activeTab === 'feedback'" class="tab-content">
+      <div class="tab-toolbar">
+        <div>
+          <h2>Response Feedback</h2>
+          <p class="tab-subtitle">See which responses students rated helpful or unhelpful</p>
+        </div>
+        <button @click="loadFeedback" class="import-btn">Refresh</button>
+      </div>
+      <div v-if="isLoadingFeedback" class="loading">Loading...</div>
+      <div v-else-if="feedbackList.length === 0" class="empty-state">No feedback submitted yet.</div>
+      <div v-else class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student</th>
+              <th>Message</th>
+              <th>Rating</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(fb, i) in feedbackList" :key="fb.id">
+              <td class="row-num">{{ i + 1 }}</td>
+              <td>
+                <div style="font-weight:700;color:#1a0f0a;">{{ fb.user_name }}</div>
+                <div style="font-size:11px;color:#8b7355;">{{ fb.user_email }}</div>
+              </td>
+              <td style="max-width:300px;font-size:13px;color:#5c3d2e;">{{ fb.message ? fb.message.substring(0, 100) + (fb.message.length > 100 ? '...' : '') : '-' }}</td>
+              <td>
+                <span :style="{ color: fb.feedback === 'up' ? '#16a34a' : '#dc2626', fontWeight: '700', fontSize: '18px' }">
+                  {{ fb.feedback === 'up' ? '👍' : '👎' }}
+                </span>
+              </td>
+              <td class="date-cell">{{ new Date(fb.created_at).toLocaleDateString() }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <div v-if="activeTab === 'requests'" class="tab-content">
       <div class="tab-toolbar">
         <div>
@@ -527,6 +569,8 @@ export default {
       isLoadingDashboard: false,
       bookRequests: [],
       isLoadingRequests: false,
+      feedbackList: [],
+      isLoadingFeedback: false,
       isLoadingSettings: true,
       isLoadingBooks: false,
       isLoadingUsers: false,
@@ -628,6 +672,18 @@ export default {
     token: function() { return localStorage.getItem('token') },
     headers: function() { return { Authorization: 'Bearer ' + this.token(), Accept: 'application/json' } },
 
+    loadFeedback: async function() {
+      this.isLoadingFeedback = true
+      try {
+        const token = localStorage.getItem('token')
+        const res = await fetch('https://colris-chatbot-backend-production.up.railway.app/api/admin/feedback', {
+          headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/json' }
+        })
+        const data = await res.json()
+        this.feedbackList = data.feedback || []
+      } catch (e) { this.feedbackList = [] }
+      this.isLoadingFeedback = false
+    },
     loadBookRequests: async function() {
       this.isLoadingRequests = true
       try {
