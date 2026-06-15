@@ -217,6 +217,7 @@
         </button>
       </div>
     </div>
+  </div>
     <!-- Book Request Modal -->
     <div v-if="showBookRequest" class="modal-overlay" @click.self="showBookRequest = false">
       <div class="feature-modal">
@@ -312,7 +313,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
