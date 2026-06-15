@@ -198,20 +198,24 @@
       </div>
     </div>
 
-    <div v-if="!showSearch && !showArrivals" class="chat-input">
-      <button @click="toggleVoice" class="mic-btn" :class="{ recording: isRecording }">
-        <span v-if="!isRecording">🎤</span>
-        <span v-else>⏹</span>
-      </button>
-      <button @click="openBookRequest" class="feature-btn" title="Request a Book">📥</button>
-      <button @click="openCitation" class="feature-btn" title="Citation Generator">📝</button>
-      <button @click="openMyRequests" class="feature-btn" title="My Book Requests">📋</button>
-      <input v-model="userInput" @keyup.enter="sendMessage" placeholder="Ask about books, hours, fines, databases, or anything else..." type="text" :disabled="isLoading" />
-      <button @click="openLatestArrivals" class="arrivals-btn" title="Latest Arrivals">🆕</button>
-      <button @click="sendMessage" :disabled="isLoading" class="send-btn">
-        <span v-if="!isLoading">➤</span>
-        <span v-else>...</span>
-      </button>
+    <div v-if="!showSearch && !showArrivals" class="chat-input-area">
+      <div class="feature-toolbar">
+        <button @click="openBookRequest" class="toolbar-btn" title="Request a Book">📥 <span>Request Book</span></button>
+        <button @click="openCitation" class="toolbar-btn" title="Citation Generator">📝 <span>Citation</span></button>
+        <button @click="openMyRequests" class="toolbar-btn" title="My Book Requests">📋 <span>My Requests</span></button>
+        <button @click="openLatestArrivals" class="toolbar-btn arrivals-toolbar-btn" title="New Arrivals">🆕 <span>New Arrivals</span></button>
+      </div>
+      <div class="chat-input">
+        <button @click="toggleVoice" class="mic-btn" :class="{ recording: isRecording }">
+          <span v-if="!isRecording">🎤</span>
+          <span v-else>⏹</span>
+        </button>
+        <input v-model="userInput" @keyup.enter="sendMessage" placeholder="Ask about books, hours, fines, databases, or anything else..." type="text" :disabled="isLoading" />
+        <button @click="sendMessage" :disabled="isLoading" class="send-btn">
+          <span v-if="!isLoading">➤</span>
+          <span v-else>...</span>
+        </button>
+      </div>
     </div>
     <!-- Book Request Modal -->
     <div v-if="showBookRequest" class="modal-overlay" @click.self="showBookRequest = false">
@@ -635,7 +639,7 @@ export default {
 .chat-messages::-webkit-scrollbar-thumb { background: #e2d8cc; border-radius: 4px; }
 
 /* ── WELCOME BANNER ── */
-.welcome-banner { text-align: center; padding: 40px 20px 20px; margin-bottom: 8px; display: flex; flex-direction: column; align-items: center; }
+.welcome-banner { text-align: center; padding: 32px 20px 16px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; align-self: center; }
 .welcome-icon { font-size: 52px; margin-bottom: 16px; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
 .capability-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px auto 16px; max-width: 720px; width: 100%; }
@@ -672,8 +676,14 @@ export default {
 .message-bubble :deep(.list-number) { background: #1a0f0a; color: #c9a84c; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
 .message-bubble :deep(.bullet-item) { margin: 6px 0; padding-left: 8px; color: #1a0f0a; }
 
-.feature-btn { width: 36px; height: 36px; background: #faf7f2; border: 1.5px solid #e8dcc8; border-radius: 8px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.25s; }
-.feature-btn:hover { background: #fdf6e3; border-color: #c9a84c; transform: scale(1.05); }
+.chat-input-area { display: flex; flex-direction: column; background: white; border-top: 1px solid #e2d8cc; box-shadow: 0 -4px 20px rgba(0,0,0,0.06); }
+.feature-toolbar { display: flex; gap: 8px; padding: 10px 16px 0; overflow-x: auto; }
+.feature-toolbar::-webkit-scrollbar { display: none; }
+.toolbar-btn { display: flex; align-items: center; gap: 6px; background: #faf7f2; border: 1.5px solid #e8dcc8; color: #5c3d2e; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap; transition: all 0.2s; }
+.toolbar-btn:hover { background: #fdf6e3; border-color: #c9a84c; color: #1a0f0a; }
+.arrivals-toolbar-btn { background: #1a0f0a; border-color: #1a0f0a; color: #c9a84c; }
+.arrivals-toolbar-btn:hover { background: #2c1810; border-color: #c9a84c; color: #c9a84c; }
+.chat-input { display: flex; padding: 10px 16px 14px; gap: 10px; align-items: center; }
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
 .feature-modal { background: white; border-radius: 20px; padding: 28px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.2); animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
@@ -745,7 +755,7 @@ export default {
 @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-8px); } }
 
 /* ── INPUT BAR ── */
-.chat-input { display: flex; padding: 14px 16px; background: white; border-top: 1px solid #e2d8cc; gap: 10px; align-items: center; box-shadow: 0 -4px 20px rgba(0,0,0,0.06); }
+.chat-input-old { display: none; }
 .chat-input input { flex: 1; padding: 12px 18px; border: 1.5px solid #e2d8cc; border-radius: 10px; font-size: 14px; outline: none; background: #f5f0e8; color: #1a0f0a; font-family: 'Segoe UI', Arial, sans-serif; transition: all 0.25s; }
 .chat-input input:focus { border-color: #c9a84c; background: white; box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
 .chat-input input::placeholder { color: #b8a898; }
