@@ -165,7 +165,7 @@
       </div>
       <div v-for="(message, index) in messages" :key="index" :class="['message', message.sender]">
         <div class="message-avatar" v-if="message.sender === 'bot'">📚</div>
-        <div style="display:flex;flex-direction:column;gap:8px;max-width:72%;">
+        <div style="display:flex;flex-direction:column;gap:8px;max-width:85%;">
           <div class="message-bubble" v-html="formatMessage(message.text)"></div>
           <div v-if="message.sender === 'bot' && !message.isFallback" class="message-actions">
             <button @click="thumbs(index, 'up')" :class="['action-btn', message.feedback === 'up' ? 'active-up' : '']" title="Helpful">👍</button>
@@ -757,7 +757,7 @@ export default {
 /* ── MESSAGES ── */
 .message { display: flex; align-items: flex-end; gap: 10px; animation: msgIn 0.3s ease; }
 @keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-.message.user { flex-direction: row-reverse; }
+.message.user { flex-direction: row-reverse; max-width: calc(100% - 20px); margin-left: auto; }
 .message-avatar { font-size: 14px; width: 32px; height: 32px; border-radius: 8px; background: #1a0f0a; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .user-avatar { background: linear-gradient(135deg, #c9a84c, #b8960a); }
 .message-bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.7; }
