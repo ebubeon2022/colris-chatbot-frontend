@@ -1,5 +1,6 @@
 <template>
   <div class="landing">
+    <canvas ref="particles" class="particles-canvas"></canvas>
     <nav class="nav">
       <div class="nav-brand">
         <img src="/cu-logo.png" alt="Covenant University" class="cu-logo" />
@@ -17,7 +18,7 @@
     <section class="hero">
       <div class="hero-inner">
         <div class="hero-badge">Covenant University · Ota, Ogun State</div>
-        <h1 class="hero-title">Your 24/7 AI Library <span class="gold">Assistant</span></h1>
+        <h1 class="hero-title">{{ typedText }}<span class="cursor">|</span><br><span class="gold">Assistant</span></h1>
         <p class="hero-sub">Instantly find books, generate citations, request resources, and get library support — all through a smart conversational interface built for CU students.</p>
         <div class="hero-actions">
           <button @click="$emit('show-register')" class="btn-primary">Get Started Free</button>
@@ -40,35 +41,10 @@
       <div class="section-label">WHAT IT CAN DO</div>
       <h2 class="section-title">Everything you need from the library, in one conversation</h2>
       <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🔍</div>
-          <h3>Book Discovery</h3>
-          <p>Search the COLRIS catalogue instantly. Get direct links to any book, journal or resource.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📝</div>
-          <h3>Citation Generator</h3>
-          <p>Generate APA, MLA, or Harvard citations in seconds. Just provide the book details.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📥</div>
-          <h3>Book Requests</h3>
-          <p>Cannot find a book? Submit a request directly to the librarian through the chat.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🗄️</div>
-          <h3>Database Access</h3>
-          <p>Get guided access to JSTOR, IEEE Xplore, Google Scholar and other academic databases.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🧑‍💼</div>
-          <h3>Human Handoff</h3>
-          <p>When the AI cannot help, it connects you directly to a librarian via email.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📖</div>
-          <h3>Subject Guides</h3>
-          <p>Tell the chatbot your topic and get a curated research guide with keywords and resources.</p>
+        <div class="feature-card animate-card" v-for="(card, i) in featureCards" :key="i" :style="{ animationDelay: i * 0.1 + 's' }">
+          <div class="feature-icon">{{ card.icon }}</div>
+          <h3>{{ card.title }}</h3>
+          <p>{{ card.desc }}</p>
         </div>
       </div>
     </section>
@@ -118,7 +94,85 @@
 <script>
 export default {
   name: "Landing",
-  emits: ["show-login", "show-register"]
+  emits: ["show-login", "show-register"],
+  data() {
+    return {
+      typedText: "",
+      fullText: "Your 24/7 AI Library",
+      typingIndex: 0,
+      featureCards: [
+        { icon: "🔍", title: "Book Discovery", desc: "Search the COLRIS catalogue instantly. Get direct links to any book, journal or resource." },
+        { icon: "📝", title: "Citation Generator", desc: "Generate APA, MLA, or Harvard citations in seconds. Just provide the book details." },
+        { icon: "📥", title: "Book Requests", desc: "Cannot find a book? Submit a request directly to the librarian through the chat." },
+        { icon: "🗄️", title: "Database Access", desc: "Get guided access to JSTOR, IEEE Xplore, Google Scholar and other academic databases." },
+        { icon: "🧑‍💼", title: "Human Handoff", desc: "When the AI cannot help, it connects you directly to a librarian via email." },
+        { icon: "📖", title: "Subject Guides", desc: "Tell the chatbot your topic and get a curated research guide with keywords and resources." }
+      ]
+    }
+  },
+  mounted() {
+    this.startTyping()
+    this.initParticles()
+    this.initScrollAnimations()
+  },
+  methods: {
+    startTyping() {
+      if (this.typingIndex < this.fullText.length) {
+        this.typedText += this.fullText[this.typingIndex]
+        this.typingIndex++
+        setTimeout(this.startTyping, 60)
+      }
+    },
+    initParticles() {
+      const canvas = this.$refs.particles
+      if (!canvas) return
+      const ctx = canvas.getContext("2d")
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+      const particles = []
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 1.5 + 0.5,
+          dx: (Math.random() - 0.5) * 0.4,
+          dy: (Math.random() - 0.5) * 0.4,
+          opacity: Math.random() * 0.5 + 0.1
+        })
+      }
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        particles.forEach(p => {
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(201, 168, 76, ${p.opacity})`
+          ctx.fill()
+          p.x += p.dx
+          p.y += p.dy
+          if (p.x < 0 || p.x > canvas.width) p.dx *= -1
+          if (p.y < 0 || p.y > canvas.height) p.dy *= -1
+        })
+        requestAnimationFrame(animate)
+      }
+      animate()
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+      })
+    },
+    initScrollAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible")
+          }
+        })
+      }, { threshold: 0.1 })
+      setTimeout(() => {
+        document.querySelectorAll(".animate-card, .step, .cta").forEach(el => observer.observe(el))
+      }, 500)
+    }
+  }
 }
 </script>
 
@@ -190,6 +244,15 @@ export default {
 .footer-logo { width: 32px; height: 32px; object-fit: contain; }
 .footer-sub { font-size: 13px; color: #8b7355; margin-bottom: 6px; }
 .footer-copy { font-size: 12px; color: #5c4a3a; }
+.particles-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.cursor { animation: blink 1s step-end infinite; color: #c9a84c; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.animate-card { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.animate-card.visible { opacity: 1; transform: translateY(0); }
+.step { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.step.visible { opacity: 1; transform: translateY(0); }
+.cta { opacity: 0; transition: opacity 0.8s ease; }
+.cta.visible { opacity: 1; }
 @media (max-width: 768px) {
   .nav { padding: 16px 20px; }
   .hero { flex-direction: column; padding: 40px 20px; text-align: center; }
