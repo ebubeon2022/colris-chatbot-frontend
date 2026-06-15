@@ -214,9 +214,7 @@ export default {
       announcement: '',
       newArrivals: [],
       isLoadingArrivals: false,
-      messages: [
-        { sender: 'bot', text: 'Hello! I am the COLRIS Library AI Assistant. How can I help you today?' },
-      ],
+      messages: [],
     }
   },
   watch: {
@@ -229,6 +227,11 @@ export default {
     },
   },
   async mounted() {
+    // Personalised greeting
+    const userName = this.user && this.user.name ? this.user.name.split(' ')[0] : 'there'
+    this.messages = [
+      { sender: 'bot', text: 'Welcome back, ' + userName + '! 👋 I am the COLRIS Library AI Assistant. How can I help you today?' }
+    ]
     try {
       const response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/settings/public')
       if (response.data.library_announcement) {
@@ -483,10 +486,10 @@ export default {
 .chat-messages::-webkit-scrollbar-thumb { background: #e2d8cc; border-radius: 4px; }
 
 /* ── WELCOME BANNER ── */
-.welcome-banner { text-align: center; padding: 40px 20px 20px; margin-bottom: 8px; }
+.welcome-banner { text-align: center; padding: 40px 20px 20px; margin-bottom: 8px; display: flex; flex-direction: column; align-items: center; }
 .welcome-icon { font-size: 52px; margin-bottom: 16px; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-.capability-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0 16px; max-width: 720px; width: 100%; }
+.capability-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px auto 16px; max-width: 720px; width: 100%; }
 .capability-card { background: white; border: 1.5px solid #e8dcc8; border-radius: 14px; padding: 16px 12px; cursor: pointer; transition: all 0.25s ease; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(92,61,46,0.06); }
 .capability-card:hover { border-color: #c9a84c; background: #fdf6e3; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(92,61,46,0.12); }
 .arrivals-card { background: #1a0f0a; border-color: #1a0f0a; }

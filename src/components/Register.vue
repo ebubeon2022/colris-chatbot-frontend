@@ -206,10 +206,15 @@ export default {
       }
     },
     startResendCooldown() {
+      if (this.resendTimer) clearInterval(this.resendTimer)
       this.resendCooldown = 60
       this.resendTimer = setInterval(() => {
         this.resendCooldown--
-        if (this.resendCooldown <= 0) clearInterval(this.resendTimer)
+        if (this.resendCooldown <= 0) {
+          clearInterval(this.resendTimer)
+          this.resendTimer = null
+          this.resendCooldown = 0
+        }
       }, 1000)
     },
     async resendOtp() {
