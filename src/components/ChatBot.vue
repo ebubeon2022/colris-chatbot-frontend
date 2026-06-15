@@ -96,15 +96,53 @@
     <div v-else class="chat-messages" ref="messageContainer">
       <div class="welcome-banner" v-if="messages.length === 1">
         <div class="welcome-icon">📚</div>
-        <h3>How can I assist you today?</h3>
-        <p class="welcome-sub">Ask me anything about the Covenant University Library</p>
-        <div class="quick-actions">
-          <button @click="quickAsk('What are the library opening hours?')">Library Hours</button>
-          <button @click="quickAsk('How do I borrow a book?')">Borrow a Book</button>
-          <button @click="quickAsk('What databases are available?')">Databases</button>
-          <button @click="quickAsk('How do I access e-journals?')">E-Journals</button>
-          <button @click="openLatestArrivals" class="arrivals-quick-btn">Latest Arrivals</button>
+        <h3>Welcome to COLRIS Library Assistant</h3>
+        <p class="welcome-sub">Your 24/7 Covenant University Library companion — ask me anything</p>
+
+        <div class="capability-grid">
+          <div class="capability-card" @click="quickAsk('What are the library opening hours?')">
+            <div class="cap-icon">🕐</div>
+            <div class="cap-label">Library Hours</div>
+            <div class="cap-hint">Opening & closing times</div>
+          </div>
+          <div class="capability-card" @click="quickAsk('How do I borrow a book from the library?')">
+            <div class="cap-icon">📖</div>
+            <div class="cap-label">Borrowing</div>
+            <div class="cap-hint">Limits, duration & renewals</div>
+          </div>
+          <div class="capability-card" @click="quickAsk('What is the fine for returning a book late?')">
+            <div class="cap-icon">💰</div>
+            <div class="cap-label">Fines & Fees</div>
+            <div class="cap-hint">Late return penalties</div>
+          </div>
+          <div class="capability-card" @click="quickAsk('What databases and e-resources are available in the library?')">
+            <div class="cap-icon">🗄️</div>
+            <div class="cap-label">Databases</div>
+            <div class="cap-hint">E-resources & journals</div>
+          </div>
+          <div class="capability-card" @click="quickAsk('How do I find a book in the COLRIS catalogue?')">
+            <div class="cap-icon">🔍</div>
+            <div class="cap-label">Find a Book</div>
+            <div class="cap-hint">Search COLRIS catalogue</div>
+          </div>
+          <div class="capability-card arrivals-card" @click="openLatestArrivals">
+            <div class="cap-icon">🆕</div>
+            <div class="cap-label">New Arrivals</div>
+            <div class="cap-hint">Latest books in the library</div>
+          </div>
+          <div class="capability-card" @click="quickAsk('How do I access e-journals and online resources?')">
+            <div class="cap-icon">📰</div>
+            <div class="cap-label">E-Journals</div>
+            <div class="cap-hint">Online access & login</div>
+          </div>
+          <div class="capability-card" @click="quickAsk('What are the library rules and regulations?')">
+            <div class="cap-icon">📋</div>
+            <div class="cap-label">Library Rules</div>
+            <div class="cap-hint">Policies & conduct</div>
+          </div>
         </div>
+
+        <p class="welcome-tip">💡 You can also ask general questions — I am not just a library assistant!</p>
       </div>
       <div v-for="(message, index) in messages" :key="index" :class="['message', message.sender]">
         <div class="message-avatar" v-if="message.sender === 'bot'">📚</div>
@@ -140,7 +178,7 @@
         <span v-if="!isRecording">🎤</span>
         <span v-else>⏹</span>
       </button>
-      <input v-model="userInput" @keyup.enter="sendMessage" placeholder="Type your question here..." type="text" :disabled="isLoading" />
+      <input v-model="userInput" @keyup.enter="sendMessage" placeholder="Ask about books, hours, fines, databases, or anything else..." type="text" :disabled="isLoading" />
       <button @click="openLatestArrivals" class="arrivals-btn" title="Latest Arrivals">🆕</button>
       <button @click="sendMessage" :disabled="isLoading" class="send-btn">
         <span v-if="!isLoading">➤</span>
@@ -447,6 +485,17 @@ export default {
 /* ── WELCOME BANNER ── */
 .welcome-banner { text-align: center; padding: 40px 20px 20px; margin-bottom: 8px; }
 .welcome-icon { font-size: 52px; margin-bottom: 16px; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+.capability-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0 16px; max-width: 720px; width: 100%; }
+.capability-card { background: white; border: 1.5px solid #e8dcc8; border-radius: 14px; padding: 16px 12px; cursor: pointer; transition: all 0.25s ease; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(92,61,46,0.06); }
+.capability-card:hover { border-color: #c9a84c; background: #fdf6e3; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(92,61,46,0.12); }
+.arrivals-card { background: #1a0f0a; border-color: #1a0f0a; }
+.arrivals-card .cap-icon, .arrivals-card .cap-label, .arrivals-card .cap-hint { color: #c9a84c !important; }
+.arrivals-card:hover { background: #2c1810; border-color: #c9a84c; }
+.cap-icon { font-size: 24px; }
+.cap-label { font-size: 13px; font-weight: 700; color: #1a0f0a; }
+.cap-hint { font-size: 11px; color: #8b7355; line-height: 1.3; }
+.welcome-tip { color: #8b7355; font-size: 12px; margin-top: 8px; font-style: italic; }
 @keyframes popIn { from { transform: scale(0) rotate(-10deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
 .welcome-banner h3 { color: #1a0f0a; font-size: 22px; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.3px; }
 .welcome-sub { color: #8b7355; font-size: 14px; margin-bottom: 28px; }
