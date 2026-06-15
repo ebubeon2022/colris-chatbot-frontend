@@ -26,8 +26,6 @@
         <div class="hero-stats">
           <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Available</span></div>
           <div class="stat-div"></div>
-          <div class="stat"><span class="stat-num">4.55/5</span><span class="stat-label">User Rating</span></div>
-          <div class="stat-div"></div>
           <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Free for CU</span></div>
         </div>
       </div>
