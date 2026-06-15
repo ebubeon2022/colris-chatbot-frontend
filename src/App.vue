@@ -86,7 +86,7 @@ import axios from 'axios'
 
 export default {
   name: 'App',
-  components: { Login, Register, ChatBot, Admin },
+  components: { Landing, Login, Register, ChatBot, Admin },
   data() {
     return {
       currentView: 'landing',
