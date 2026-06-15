@@ -16,6 +16,7 @@
         <button @click="activeTab = 'books'" :class="{ active: activeTab === 'books' }">Books</button>
         <button @click="activeTab = 'users'" :class="{ active: activeTab === 'users' }">Users</button>
         <button @click="activeTab = 'logs'" :class="{ active: activeTab === 'logs' }">Conversation Logs</button>
+        <button @click="activeTab = 'requests'; loadBookRequests()" :class="{ active: activeTab === 'requests' }">Book Requests</button>
       </div>
     </div>
 
@@ -387,6 +388,58 @@
                   </select>
                   <button @click="deleteUser(user.id)" class="delete-btn">Delete</button>
                 </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div v-if="activeTab === 'requests'" class="tab-content">
+      <div class="tab-toolbar">
+        <div>
+          <h2>Book Requests</h2>
+          <p class="tab-subtitle">Manage student book requests</p>
+        </div>
+        <button @click="loadBookRequests" class="import-btn">Refresh</button>
+      </div>
+      <div v-if="isLoadingRequests" class="loading">Loading...</div>
+      <div v-else-if="bookRequests.length === 0" class="empty-state">No book requests yet.</div>
+      <div v-else class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student</th>
+              <th>Book Title</th>
+              <th>Author</th>
+              <th>Reason</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(req, i) in bookRequests" :key="req.id">
+              <td class="row-num">{{ i + 1 }}</td>
+              <td>
+                <div style="font-weight:700;color:#1a0f0a;">{{ req.user_name }}</div>
+                <div style="font-size:11px;color:#8b7355;">{{ req.user_email }}</div>
+              </td>
+              <td style="font-weight:600;">{{ req.title }}</td>
+              <td>{{ req.author || '-' }}</td>
+              <td style="max-width:180px;font-size:12px;color:#5c3d2e;">{{ req.reason || '-' }}</td>
+              <td>
+                <select @change="updateRequest(req.id, $event.target.value, req.admin_note)" class="role-select">
+                  <option value="pending" :selected="req.status === 'pending'">Pending</option>
+                  <option value="approved" :selected="req.status === 'approved'">Approved</option>
+                  <option value="ordered" :selected="req.status === 'ordered'">Ordered</option>
+                  <option value="rejected" :selected="req.status === 'rejected'">Rejected</option>
+                </select>
+              </td>
+              <td class="date-cell">{{ new Date(req.created_at).toLocaleDateString() }}</td>
+              <td>
+                <input v-model="req.admin_note" placeholder="Add note..." style="padding:4px 8px;border:1px solid #e8dcc8;border-radius:4px;font-size:12px;width:120px;" @blur="updateRequest(req.id, req.status, req.admin_note)" />
               </td>
             </tr>
           </tbody>

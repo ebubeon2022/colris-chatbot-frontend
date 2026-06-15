@@ -203,12 +203,110 @@
         <span v-if="!isRecording">🎤</span>
         <span v-else>⏹</span>
       </button>
+      <button @click="openBookRequest" class="feature-btn" title="Request a Book">📥</button>
+      <button @click="openCitation" class="feature-btn" title="Citation Generator">📝</button>
+      <button @click="openMyRequests" class="feature-btn" title="My Book Requests">📋</button>
       <input v-model="userInput" @keyup.enter="sendMessage" placeholder="Ask about books, hours, fines, databases, or anything else..." type="text" :disabled="isLoading" />
       <button @click="openLatestArrivals" class="arrivals-btn" title="Latest Arrivals">🆕</button>
       <button @click="sendMessage" :disabled="isLoading" class="send-btn">
         <span v-if="!isLoading">➤</span>
         <span v-else>...</span>
       </button>
+    </div>
+    <!-- Book Request Modal -->
+    <div v-if="showBookRequest" class="modal-overlay" @click.self="showBookRequest = false">
+      <div class="feature-modal">
+        <div class="modal-header">
+          <h3>📚 Request a Book</h3>
+          <button @click="showBookRequest = false" class="modal-close">✕</button>
+        </div>
+        <p class="modal-sub">Can't find a book in our library? Submit a request and the librarian will review it.</p>
+        <div class="modal-form">
+          <div class="form-group">
+            <label>Book Title *</label>
+            <input v-model="bookReq.title" type="text" placeholder="e.g. Introduction to Algorithms" />
+          </div>
+          <div class="form-group">
+            <label>Author (optional)</label>
+            <input v-model="bookReq.author" type="text" placeholder="e.g. Thomas H. Cormen" />
+          </div>
+          <div class="form-group">
+            <label>Why do you need this book?</label>
+            <textarea v-model="bookReq.reason" placeholder="e.g. For my final year project on machine learning" rows="3"></textarea>
+          </div>
+          <div v-if="bookReqMsg" :class="['req-msg', bookReqSuccess ? 'success' : 'error']">{{ bookReqMsg }}</div>
+          <button @click="submitBookRequest" class="modal-submit-btn" :disabled="isSubmittingReq">
+            {{ isSubmittingReq ? 'Submitting...' : 'Submit Request' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Citation Generator Modal -->
+    <div v-if="showCitation" class="modal-overlay" @click.self="showCitation = false">
+      <div class="feature-modal">
+        <div class="modal-header">
+          <h3>📝 Citation Generator</h3>
+          <button @click="showCitation = false" class="modal-close">✕</button>
+        </div>
+        <p class="modal-sub">Generate a properly formatted citation for any book or resource.</p>
+        <div class="modal-form">
+          <div class="form-group">
+            <label>Author(s)</label>
+            <input v-model="citForm.author" type="text" placeholder="e.g. Smith, J., and Jones, A." />
+          </div>
+          <div class="form-group">
+            <label>Title of Book/Article</label>
+            <input v-model="citForm.title" type="text" placeholder="e.g. Introduction to Computing" />
+          </div>
+          <div class="form-group">
+            <label>Year of Publication</label>
+            <input v-model="citForm.year" type="text" placeholder="e.g. 2023" />
+          </div>
+          <div class="form-group">
+            <label>Publisher</label>
+            <input v-model="citForm.publisher" type="text" placeholder="e.g. Pearson Education" />
+          </div>
+          <div class="form-group">
+            <label>City of Publication</label>
+            <input v-model="citForm.city" type="text" placeholder="e.g. New York" />
+          </div>
+          <div class="form-group">
+            <label>Citation Style</label>
+            <select v-model="citForm.style">
+              <option value="apa">APA</option>
+              <option value="mla">MLA</option>
+              <option value="harvard">Harvard</option>
+            </select>
+          </div>
+          <div v-if="citResult" class="citation-result">
+            <p class="cit-label">Generated Citation:</p>
+            <p class="cit-text">{{ citResult }}</p>
+            <button @click="copyCitation" class="copy-cit-btn">{{ citCopied ? "Copied!" : "Copy" }}</button>
+          </div>
+          <button @click="generateCitation" class="modal-submit-btn">Generate Citation</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Book Requests Modal -->
+    <div v-if="showMyRequests" class="modal-overlay" @click.self="showMyRequests = false">
+      <div class="feature-modal">
+        <div class="modal-header">
+          <h3>📋 My Book Requests</h3>
+          <button @click="showMyRequests = false" class="modal-close">✕</button>
+        </div>
+        <div v-if="myRequests.length === 0" class="empty-requests">No book requests yet.</div>
+        <div v-for="req in myRequests" :key="req.id" class="req-item">
+          <div class="req-title">{{ req.title }}</div>
+          <div class="req-author" v-if="req.author">by {{ req.author }}</div>
+          <div class="req-status-row">
+            <span :class="['req-badge', req.status]">{{ req.status }}</span>
+            <span class="req-date">{{ new Date(req.created_at).toLocaleDateString() }}</span>
+          </div>
+          <div v-if="req.admin_note" class="req-note">Note: {{ req.admin_note }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -234,6 +332,17 @@ export default {
       showArrivals: false,
       showSaved: false,
       savedAnswers: [],
+      showBookRequest: false,
+      showCitation: false,
+      showMyRequests: false,
+      myRequests: [],
+      bookReq: { title: '', author: '', reason: '' },
+      bookReqMsg: '',
+      bookReqSuccess: false,
+      isSubmittingReq: false,
+      citForm: { author: '', title: '', year: '', publisher: '', city: '', style: 'apa' },
+      citResult: '',
+      citCopied: false,
       didYouKnowTips: [
         'You can ask me to find books by topic, author, or title.',
         'Type "library hours" to get today\'s opening times instantly.',
@@ -563,6 +672,42 @@ export default {
 .message-bubble :deep(.list-number) { background: #1a0f0a; color: #c9a84c; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
 .message-bubble :deep(.bullet-item) { margin: 6px 0; padding-left: 8px; color: #1a0f0a; }
 
+.feature-btn { width: 36px; height: 36px; background: #faf7f2; border: 1.5px solid #e8dcc8; border-radius: 8px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.25s; }
+.feature-btn:hover { background: #fdf6e3; border-color: #c9a84c; transform: scale(1.05); }
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.feature-modal { background: white; border-radius: 20px; padding: 28px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.2); animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.modal-header h3 { color: #1a0f0a; font-size: 18px; font-weight: 800; margin: 0; }
+.modal-close { background: none; border: none; cursor: pointer; color: #8b7355; font-size: 18px; }
+.modal-sub { color: #8b7355; font-size: 13px; margin: 0 0 20px; }
+.modal-form { display: flex; flex-direction: column; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { color: #5c3d2e; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-group input, .form-group textarea, .form-group select { padding: 10px 14px; border: 1.5px solid #e2d8cc; border-radius: 8px; font-size: 14px; color: #1a0f0a; background: #faf7f2; outline: none; font-family: inherit; transition: all 0.2s; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #c9a84c; background: white; box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+.modal-submit-btn { background: #1a0f0a; color: #fdf6e3; border: none; padding: 13px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.25s; }
+.modal-submit-btn:hover { background: #2c1810; transform: translateY(-1px); }
+.modal-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.req-msg { padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+.req-msg.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #16a34a; }
+.req-msg.error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; }
+.citation-result { background: #fdf6e3; border: 1.5px solid #c9a84c; border-radius: 10px; padding: 14px; }
+.cit-label { color: #8b5e3c; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px; }
+.cit-text { color: #1a0f0a; font-size: 14px; line-height: 1.6; margin: 0 0 10px; font-style: italic; }
+.copy-cit-btn { background: #1a0f0a; color: #fdf6e3; border: none; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
+.empty-requests { text-align: center; padding: 40px; color: #b8a898; font-size: 14px; }
+.req-item { padding: 14px 0; border-bottom: 1px solid #f0e8dc; }
+.req-item:last-child { border-bottom: none; }
+.req-title { color: #1a0f0a; font-size: 15px; font-weight: 700; }
+.req-author { color: #8b7355; font-size: 13px; margin: 2px 0; }
+.req-status-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.req-badge { padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.req-badge.pending { background: #fef9e7; color: #92400e; border: 1px solid #fde68a; }
+.req-badge.approved { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.req-badge.rejected { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.req-badge.ordered { background: #fdf6e3; color: #8b5e3c; border: 1px solid #e8dcc8; }
+.req-date { font-size: 11px; color: #b8a898; }
+.req-note { margin-top: 6px; font-size: 12px; color: #5c3d2e; background: #fdf6e3; padding: 6px 10px; border-radius: 6px; }
 .message-actions { display: flex; gap: 6px; margin-top: 4px; }
 .action-btn { background: white; border: 1px solid #e8dcc8; color: #8b7355; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; padding: 0; }
 .action-btn:hover { border-color: #c9a84c; background: #fdf6e3; transform: scale(1.1); }
