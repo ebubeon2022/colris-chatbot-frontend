@@ -11,11 +11,26 @@
           </p>
         </div>
       </div>
+      <button @click="showSaved = !showSaved" class="save-toggle-btn" title="Saved Answers">🔖</button>
       <button @click="showSearch = !showSearch; showArrivals = false" class="search-toggle-btn">
         {{ showSearch ? 'Chat' : 'Search Books' }}
       </button>
     </div>
 
+    <div v-if="showSaved" class="saved-panel">
+      <div class="saved-header">
+        <span>🔖 Saved Answers ({{ savedAnswers.length }})</span>
+        <button @click="showSaved = false" class="close-saved">✕</button>
+      </div>
+      <div v-if="savedAnswers.length === 0" class="saved-empty">No saved answers yet. Click 🔖 on any response to save it.</div>
+      <div v-for="(ans, i) in savedAnswers" :key="i" class="saved-item">
+        <p class="saved-text" v-html="formatMessage(ans.text)"></p>
+        <div class="saved-meta">
+          <span>{{ ans.time }}</span>
+          <button @click="savedAnswers.splice(i, 1)" class="delete-saved">Remove</button>
+        </div>
+      </div>
+    </div>
     <div v-if="announcement" class="announcement-banner">
       <span class="announcement-dot"></span>
       <span class="announcement-label">Notice</span>
@@ -143,11 +158,21 @@
         </div>
 
         <p class="welcome-tip">💡 You can also ask general questions — I am not just a library assistant!</p>
+        <div class="did-you-know">
+          <span class="dyk-label">📖 Did you know?</span>
+          <span class="dyk-text">{{ didYouKnowTip }}</span>
+        </div>
       </div>
       <div v-for="(message, index) in messages" :key="index" :class="['message', message.sender]">
         <div class="message-avatar" v-if="message.sender === 'bot'">📚</div>
         <div style="display:flex;flex-direction:column;gap:8px;max-width:72%;">
           <div class="message-bubble" v-html="formatMessage(message.text)"></div>
+          <div v-if="message.sender === 'bot' && !message.isFallback" class="message-actions">
+            <button @click="thumbs(index, 'up')" :class="['action-btn', message.feedback === 'up' ? 'active-up' : '']" title="Helpful">👍</button>
+            <button @click="thumbs(index, 'down')" :class="['action-btn', message.feedback === 'down' ? 'active-down' : '']" title="Not helpful">👎</button>
+            <button @click="saveAnswer(message.text)" class="action-btn" title="Save answer">🔖</button>
+            <button v-if="hasColrisLink(message.text)" @click="shareLink(message.text)" class="action-btn" title="Share COLRIS link">🔗</button>
+          </div>
           <div v-if="message.isFallback" class="handoff-card">
             <p class="handoff-title">🧑‍💼 Need more help?</p>
             <p class="handoff-sub">A librarian can assist you directly.</p>
@@ -207,6 +232,19 @@ export default {
       currentSessionId: null,
       showSearch: false,
       showArrivals: false,
+      showSaved: false,
+      savedAnswers: [],
+      didYouKnowTips: [
+        'You can ask me to find books by topic, author, or title.',
+        'Type "library hours" to get today\'s opening times instantly.',
+        'You can ask me what the borrowing limit is for students.',
+        'Ask me about available databases and e-journals.',
+        'You can also ask general questions — not just library ones!',
+        'Type "new arrivals" to see the latest books in the library.',
+        'Ask me about fines for late book returns.',
+        'You can ask me about library rules and regulations.',
+      ],
+      didYouKnowTip: '',
       searchQuery: '',
       searchResults: [],
       isSearching: false,
@@ -227,6 +265,8 @@ export default {
     },
   },
   async mounted() {
+    // Random Did You Know tip
+    this.didYouKnowTip = this.didYouKnowTips[Math.floor(Math.random() * this.didYouKnowTips.length)]
     // Personalised greeting
     const userName = this.user && this.user.name ? this.user.name.split(' ')[0] : 'there'
     this.messages = [
@@ -523,6 +563,26 @@ export default {
 .message-bubble :deep(.list-number) { background: #1a0f0a; color: #c9a84c; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
 .message-bubble :deep(.bullet-item) { margin: 6px 0; padding-left: 8px; color: #1a0f0a; }
 
+.message-actions { display: flex; gap: 6px; margin-top: 4px; }
+.action-btn { background: white; border: 1px solid #e8dcc8; color: #8b7355; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; padding: 0; }
+.action-btn:hover { border-color: #c9a84c; background: #fdf6e3; transform: scale(1.1); }
+.active-up { background: #f0fdf4; border-color: #16a34a; }
+.active-down { background: #fef2f2; border-color: #dc2626; }
+.save-toggle-btn { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.35); color: #c9a84c; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+.save-toggle-btn:hover { background: #c9a84c; color: #1a0f0a; }
+.saved-panel { position: absolute; top: 58px; right: 0; width: 340px; max-height: 480px; background: white; border: 1.5px solid #e8dcc8; border-radius: 0 0 16px 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); z-index: 20; overflow-y: auto; }
+.saved-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0e8dc; font-weight: 700; color: #1a0f0a; font-size: 14px; }
+.close-saved { background: none; border: none; cursor: pointer; color: #8b7355; font-size: 16px; }
+.saved-empty { padding: 24px; text-align: center; color: #b8a898; font-size: 13px; }
+.saved-item { padding: 14px 16px; border-bottom: 1px solid #f5ede0; }
+.saved-text { font-size: 13px; color: #1a0f0a; line-height: 1.5; margin: 0 0 8px; max-height: 80px; overflow: hidden; }
+.saved-meta { display: flex; justify-content: space-between; align-items: center; }
+.saved-meta span { font-size: 11px; color: #b8a898; }
+.delete-saved { background: none; border: none; color: #dc2626; font-size: 11px; cursor: pointer; font-weight: 600; }
+.did-you-know { background: #fdf6e3; border: 1px solid #e8dcc8; border-radius: 10px; padding: 10px 16px; margin-top: 8px; display: flex; align-items: center; gap: 10px; font-size: 13px; max-width: 720px; width: 100%; }
+.dyk-label { font-weight: 700; color: #8b5e3c; white-space: nowrap; }
+.dyk-text { color: #5c3d2e; }
+.chat-header { position: relative; }
 .handoff-card { background: white; border: 1.5px solid #c9a84c; border-radius: 14px; padding: 16px; box-shadow: 0 4px 16px rgba(201,168,76,0.15); animation: msgIn 0.3s ease; }
 .handoff-title { color: #1a0f0a; font-size: 14px; font-weight: 700; margin: 0 0 4px; }
 .handoff-sub { color: #8b7355; font-size: 13px; margin: 0 0 14px; }

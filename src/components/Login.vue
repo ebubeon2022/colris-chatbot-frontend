@@ -37,14 +37,32 @@
           </div>
         </div>
 
-        <div v-if="errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
+        <div v-if="!showForgot and errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
+
+        <div v-if="showForgot" class="forgot-box">
+          <p class="forgot-title">Reset Password</p>
+          <p class="forgot-sub">Enter your CU email and we'll send you a reset code.</p>
+          <div class="input-group">
+            <label>Email Address</label>
+            <input v-model="resetEmail" type="email" placeholder="your@stu.cu.edu.ng" />
+          </div>
+          <div v-if="resetMessage" :class="['reset-msg', resetSuccess ? 'success' : 'error']">{{ resetMessage }}</div>
+          <button @click="sendReset" class="login-btn" :disabled="isResetting">
+            <span v-if="!isResetting">Send Reset Code →</span>
+            <span v-else class="loading-dots"><span></span><span></span><span></span></span>
+          </button>
+          <p class="switch-link" style="margin-top:12px;"><span @click="showForgot = false">← Back to Sign In</span></p>
+        </div>
 
         <button @click="login" class="login-btn" :disabled="isLoading">
           <span v-if="!isLoading">Sign In →</span>
           <span v-else class="loading-dots"><span></span><span></span><span></span></span>
         </button>
 
-        <p class="switch-link">
+        <p v-if="!showForgot" class="switch-link">
+          <span @click="showForgot = true" class="forgot-link">Forgot password?</span>
+        </p>
+        <p v-if="!showForgot" class="switch-link">
           Don't have an account? <span @click="$emit('show-register')">Register here</span>
         </p>
       </div>
@@ -64,9 +82,32 @@ export default {
       showPassword: false,
       errorMessage: '',
       isLoading: false,
+      showForgot: false,
+      resetEmail: '',
+      resetMessage: '',
+      resetSuccess: false,
+      isResetting: false,
     }
   },
   methods: {
+    async sendReset() {
+      this.resetMessage = ''
+      this.isResetting = true
+      try {
+        await fetch('https://colris-chatbot-backend-production.up.railway.app/api/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ email: this.resetEmail })
+        })
+        this.resetSuccess = true
+        this.resetMessage = 'If that email exists, a reset code has been sent. Check your inbox.'
+      } catch (e) {
+        this.resetSuccess = false
+        this.resetMessage = 'Something went wrong. Please try again.'
+      } finally {
+        this.isResetting = false
+      }
+    },
     async login() {
       this.errorMessage = ''
       this.isLoading = true
@@ -274,6 +315,14 @@ export default {
   transform: translateY(-1px);
 }
 
+.forgot-link { color: #8b5e3c; cursor: pointer; font-weight: 600; font-size: 13px; }
+.forgot-link:hover { text-decoration: underline; }
+.forgot-box { background: #faf7f2; border: 1.5px solid #e8dcc8; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.forgot-title { color: #1a0f0a; font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+.forgot-sub { color: #8b7355; font-size: 13px; margin: 0 0 16px; }
+.reset-msg { padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+.reset-msg.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #16a34a; }
+.reset-msg.error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; }
 .password-wrapper { position: relative; display: flex; align-items: center; }
 .password-wrapper input { flex: 1; padding-right: 44px; }
 
