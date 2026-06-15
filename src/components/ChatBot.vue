@@ -399,6 +399,55 @@ export default {
       var encoded = encodeURIComponent(title)
       return 'https://colris.covenantuniversity.edu.ng/discovery/search?query=any,contains,' + encoded + '&tab=Everything&search_scope=MyInst_and_CI&vid=234COU_INST:VU1&lang=en&offset=0'
     },
+    async openBookRequest() {
+      this.messages.push({
+        sender: 'bot',
+        text: '📚 <strong>Request a Book</strong><br><br>Type your request in the chat box below using this format:<br><br><strong>REQUEST: Book Title by Author - Reason you need it</strong><br><br>Example: REQUEST: Clean Code by Robert Martin - For my software engineering project',
+        isFallback: false
+      })
+      this.$nextTick(() => {
+        if (this.$refs.messageContainer) this.$refs.messageContainer.scrollTop = 999999
+      })
+    },
+    openCitation() {
+      this.messages.push({
+        sender: 'bot',
+        text: '📝 <strong>Citation Generator</strong><br><br>Type your book details in the chat box using this format:<br><br><strong>CITE: Author | Title | Year | Publisher | Style</strong><br><br>Style can be APA, MLA, or Harvard<br>Example: CITE: Smith, J. | Introduction to Computing | 2023 | Pearson | APA',
+        isFallback: false
+      })
+      this.$nextTick(() => {
+        if (this.$refs.messageContainer) this.$refs.messageContainer.scrollTop = 999999
+      })
+    },
+    async openMyRequests() {
+      try {
+        const token = localStorage.getItem('token')
+        const res = await fetch('https://colris-chatbot-backend-production.up.railway.app/api/book-requests/my', {
+          headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/json' }
+        })
+        const data = await res.json()
+        const reqs = data.requests || []
+        if (reqs.length === 0) {
+          this.messages.push({ sender: 'bot', text: 'You have no book requests yet. Click <strong>Request Book</strong> to submit one!', isFallback: false })
+        } else {
+          let text = '📋 <strong>Your Book Requests:</strong><br><br>'
+          reqs.forEach(function(r, i) {
+            const color = r.status === 'approved' ? '#16a34a' : r.status === 'rejected' ? '#dc2626' : '#92400e'
+            text += (i+1) + '. <strong>' + r.title + '</strong>'
+            if (r.author) text += ' by ' + r.author
+            text += ' — <span style="color:' + color + '">' + r.status.toUpperCase() + '</span>'
+            if (r.admin_note) text += '<br>   Note: ' + r.admin_note
+            text += '<br>'
+          })
+          this.messages.push({ sender: 'bot', text: text, isFallback: false })
+        }
+        this.$nextTick(() => {
+          if (this.$refs.messageContainer) this.$refs.messageContainer.scrollTop = 999999
+        })
+      } catch (e) {
+        this.messages.push({ sender: 'bot', text: 'Could not load your requests. Please try again.', isFallback: false })
+      }
+    },
     async openLatestArrivals() {
       this.showArrivals = true
       this.showSearch = false
@@ -507,6 +556,48 @@ export default {
     },
     async sendMessage() {
       if (this.userInput.trim() === '') return
+      if (this.userInput.trim().toUpperCase().startsWith('REQUEST:')) {
+        const parts = this.userInput.replace(/^REQUEST:/i, '').trim()
+        this.messages.push({ sender: 'user', text: this.userInput })
+        this.userInput = ''
+        try {
+          const token = localStorage.getItem('token')
+          const byParts = parts.split(' by ')
+          const title = byParts[0].trim()
+          const rest = byParts[1] || ''
+          const author = rest.split(' - ')[0].trim()
+          const reason = rest.split(' - ')[1] ? rest.split(' - ')[1].trim() : ''
+          const res = await fetch('https://colris-chatbot-backend-production.up.railway.app/api/book-requests', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ title: title, author: author, reason: reason })
+          })
+          if (res.ok) {
+            this.messages.push({ sender: 'bot', text: 'Your book request for <strong>' + title + '</strong> has been submitted! The librarian will review it.', isFallback: false })
+          } else {
+            this.messages.push({ sender: 'bot', text: 'Could not submit request. Please try again.', isFallback: false })
+          }
+        } catch (e) {
+          this.messages.push({ sender: 'bot', text: 'Network error. Please try again.', isFallback: false })
+        }
+        return
+      }
+      if (this.userInput.trim().toUpperCase().startsWith('CITE:')) {
+        const parts = this.userInput.replace(/^CITE:/i, '').trim().split('|').map(function(p) { return p.trim() })
+        const author = parts[0] || ''
+        const title = parts[1] || ''
+        const year = parts[2] || ''
+        const publisher = parts[3] || ''
+        const style = (parts[4] || 'APA').toUpperCase()
+        this.messages.push({ sender: 'user', text: this.userInput })
+        this.userInput = ''
+        let citation = ''
+        if (style === 'APA') citation = author + ' (' + year + '). ' + title + '. ' + publisher + '.'
+        else if (style === 'MLA') citation = author + '. "' + title + '." ' + publisher + ', ' + year + '.'
+        else citation = author + ' ' + year + ', ' + title + ', ' + publisher + '.'
+        this.messages.push({ sender: 'bot', text: '<strong>' + style + ' Citation:</strong><br><br><em>' + citation + '</em>', isFallback: false })
+        return
+      }
       var msg = this.userInput.toLowerCase()
       if (msg.indexOf('new arrival') !== -1 || msg.indexOf('latest arrival') !== -1 || msg.indexOf('new book') !== -1 || msg.indexOf('recently added') !== -1) {
         this.messages.push({ sender: 'user', text: this.userInput })
