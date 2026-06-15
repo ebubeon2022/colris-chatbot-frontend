@@ -432,11 +432,10 @@ export default {
         } else {
           let text = '📋 **Your Book Requests:**\n\n'
           reqs.forEach(function(r, i) {
-            const color = r.status === 'approved' ? '#16a34a' : r.status === 'rejected' ? '#dc2626' : '#92400e'
             text += (i+1) + '. **' + r.title + '**'
             if (r.author) text += ' by ' + r.author
             text += ' — ' + r.status.toUpperCase()
-            if (r.admin_note) text += '\n   Note: ' + r.admin_note
+            if (r.admin_note) text += ' (Note: ' + r.admin_note + ')'
             text += '\n'
           })
           this.messages.push({ sender: 'bot', text: text, isFallback: false })
