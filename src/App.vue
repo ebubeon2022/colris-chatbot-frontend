@@ -119,7 +119,6 @@ export default {
       localStorage.removeItem('user')
       this.currentUser = null
       this.currentView = 'landing'
-      this.currentView = 'login'
       this.sessions = []
       this.sidebarOpen = false
     },
