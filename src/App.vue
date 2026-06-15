@@ -73,6 +73,7 @@
 
 <script>
 import Login from './components/Login.vue'
+import Landing from './components/Landing.vue'
 import Register from './components/Register.vue'
 import ChatBot from './components/ChatBot.vue'
 import Admin from './components/Admin.vue'
@@ -85,6 +86,7 @@ export default {
     return {
       currentView: 'login',
       currentUser: null,
+      showLanding: true,
       selectedSession: null,
       chatKey: 0,
       sessions: [],
