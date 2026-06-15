@@ -418,7 +418,7 @@ export default {
           await fetch('https://colris-chatbot-backend-production.up.railway.app/api/chat/feedback', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-            body: JSON.stringify({ session_id: this.sessionId, message_index: index, feedback: newFeedback })
+            body: JSON.stringify({ session_id: this.currentSessionId, message_index: index, feedback: newFeedback })
           })
         } catch (e) { console.error(e) }
       }
