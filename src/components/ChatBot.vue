@@ -400,6 +400,7 @@ export default {
       return 'https://colris.covenantuniversity.edu.ng/discovery/search?query=any,contains,' + encoded + '&tab=Everything&search_scope=MyInst_and_CI&vid=234COU_INST:VU1&lang=en&offset=0'
     },
     async openBookRequest() {
+      this.messages.push({ sender: 'user', text: 'Request a Book' })
       this.messages.push({
         sender: 'bot',
         text: '📚 **Request a Book**\n\nType your request in the chat box below using this format:\n\nREQUEST: Book Title by Author - Reason you need it\n\nExample: REQUEST: Clean Code by Robert Martin - For my software engineering project',
