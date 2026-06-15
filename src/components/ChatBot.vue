@@ -399,6 +399,16 @@ export default {
       var encoded = encodeURIComponent(title)
       return 'https://colris.covenantuniversity.edu.ng/discovery/search?query=any,contains,' + encoded + '&tab=Everything&search_scope=MyInst_and_CI&vid=234COU_INST:VU1&lang=en&offset=0'
     },
+    thumbs(index, type) {
+      const msg = this.messages[index]
+      this.messages[index] = Object.assign({}, msg, { feedback: msg.feedback === type ? null : type })
+      this.$set ? this.$set(this.messages, index, this.messages[index]) : (this.messages = [...this.messages])
+    },
+    saveAnswer(text) {
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      this.savedAnswers.unshift({ text: text, time: now })
+      this.showSaved = true
+    },
     async openBookRequest() {
       this.messages.push({ sender: 'user', text: 'Request a Book' })
       this.messages.push({
