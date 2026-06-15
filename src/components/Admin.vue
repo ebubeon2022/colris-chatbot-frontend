@@ -525,6 +525,8 @@ export default {
     return {
       activeTab: 'dashboard',
       isLoadingDashboard: false,
+      bookRequests: [],
+      isLoadingRequests: false,
       isLoadingSettings: true,
       isLoadingBooks: false,
       isLoadingUsers: false,
@@ -626,6 +628,28 @@ export default {
     token: function() { return localStorage.getItem('token') },
     headers: function() { return { Authorization: 'Bearer ' + this.token(), Accept: 'application/json' } },
 
+    loadBookRequests: async function() {
+      this.isLoadingRequests = true
+      try {
+        const token = localStorage.getItem('token')
+        const res = await fetch('https://colris-chatbot-backend-production.up.railway.app/api/admin/book-requests', {
+          headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/json' }
+        })
+        const data = await res.json()
+        this.bookRequests = data.requests || []
+      } catch (e) { this.bookRequests = [] }
+      this.isLoadingRequests = false
+    },
+    updateRequest: async function(id, status, note) {
+      try {
+        const token = localStorage.getItem('token')
+        await fetch('https://colris-chatbot-backend-production.up.railway.app/api/admin/book-requests/' + id, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ status: status, admin_note: note || '' })
+        })
+      } catch (e) { console.error(e) }
+    },
     loadDashboard: async function() {
       this.isLoadingDashboard = true
       try {
