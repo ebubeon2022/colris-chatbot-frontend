@@ -171,7 +171,7 @@
             <button @click="thumbs(index, 'up')" :class="['action-btn', message.feedback === 'up' ? 'active-up' : '']" title="Helpful">👍</button>
             <button @click="thumbs(index, 'down')" :class="['action-btn', message.feedback === 'down' ? 'active-down' : '']" title="Not helpful">👎</button>
             <button @click="saveAnswer(message.text)" class="action-btn" title="Save answer">🔖</button>
-            <button v-if="hasColrisLink(message.text)" @click="shareLink(message.text)" class="action-btn" title="Share COLRIS link">🔗</button>
+            <button v-if="message.text && message.text.includes('colris.covenantuniversity.edu.ng')" @click="shareLink(message.text)" class="action-btn" title="Share COLRIS link">🔗</button>
           </div>
           <div v-if="message.isFallback" class="handoff-card">
             <p class="handoff-title">🧑‍💼 Need more help?</p>
