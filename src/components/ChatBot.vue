@@ -410,6 +410,7 @@ export default {
       })
     },
     openCitation() {
+      this.messages.push({ sender: 'user', text: 'Citation Generator' })
       this.messages.push({
         sender: 'bot',
         text: '📝 **Citation Generator**\n\nType your book details in the chat box using this format:\n\nCITE: Author | Title | Year | Publisher | Style\n\nStyle can be APA, MLA, or Harvard\nExample: CITE: Smith, J. | Introduction to Computing | 2023 | Pearson | APA',
@@ -420,6 +421,7 @@ export default {
       })
     },
     async openMyRequests() {
+      this.messages.push({ sender: 'user', text: 'My Book Requests' })
       try {
         const token = localStorage.getItem('token')
         const res = await fetch('https://colris-chatbot-backend-production.up.railway.app/api/book-requests/my', {
