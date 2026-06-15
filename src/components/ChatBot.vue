@@ -761,7 +761,7 @@ export default {
 .message-avatar { font-size: 14px; width: 32px; height: 32px; border-radius: 8px; background: #1a0f0a; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .user-avatar { background: linear-gradient(135deg, #c9a84c, #b8960a); }
 .message-bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.7; }
-.message.user .message-bubble { background: #1a0f0a; color: #fdf6e3; border-bottom-right-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.message.user .message-bubble { background: #1a0f0a; color: #fdf6e3; border-bottom-right-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); white-space: nowrap; }
 .message.bot .message-bubble { background: white; color: #1a0f0a; border-bottom-left-radius: 4px; border: 1px solid rgba(0,0,0,0.07); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .message-bubble :deep(a) { color: #c9a84c; text-decoration: underline; word-break: break-all; }
 .message-bubble :deep(strong) { color: #1a0f0a; font-weight: 700; }
