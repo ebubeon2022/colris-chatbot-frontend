@@ -1,7 +1,12 @@
 <template>
   <div>
+    <Landing
+      v-if="currentView === 'landing'"
+      @show-login="currentView = 'login'"
+      @show-register="currentView = 'register'"
+    />
     <Register
-      v-if="currentView === 'register'"
+      v-else-if="currentView === 'register'"
       @login-success="handleLoginSuccess"
       @show-login="currentView = 'login'"
     />
@@ -84,7 +89,7 @@ export default {
   components: { Login, Register, ChatBot, Admin },
   data() {
     return {
-      currentView: 'login',
+      currentView: 'landing',
       currentUser: null,
       showLanding: true,
       selectedSession: null,
@@ -113,6 +118,7 @@ export default {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
       this.currentUser = null
+      this.currentView = 'landing'
       this.currentView = 'login'
       this.sessions = []
       this.sidebarOpen = false
