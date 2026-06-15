@@ -37,7 +37,7 @@
           </div>
         </div>
 
-        <div v-if="!showForgot and errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
+        <div v-if="!showForgot && errorMessage" class="error-message">⚠️ {{ errorMessage }}</div>
 
         <div v-if="showForgot" class="forgot-box">
           <p class="forgot-title">Reset Password</p>
