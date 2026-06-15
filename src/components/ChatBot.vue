@@ -549,7 +549,7 @@ export default {
 <style scoped>
 * { box-sizing: border-box; }
 
-.chat-container { display: flex; flex-direction: column; height: 100vh; background: #f5f0e8; font-family: 'Segoe UI', Arial, sans-serif; animation: fadeIn 0.4s ease; position: relative; }
+.chat-container { display: flex; flex-direction: column; height: 100vh; background: #f5f0e8; font-family: 'Segoe UI', Arial, sans-serif; animation: fadeIn 0.4s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* ── HEADER ── */
@@ -684,8 +684,8 @@ export default {
 .arrivals-toolbar-btn { background: #1a0f0a; border-color: #1a0f0a; color: #c9a84c; }
 .arrivals-toolbar-btn:hover { background: #2c1810; border-color: #c9a84c; color: #c9a84c; }
 .chat-input { display: flex; padding: 10px 16px 14px; gap: 10px; align-items: center; }
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-.feature-modal { background: white; border-radius: 20px; padding: 28px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.2); animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: flex; align-items: center; justify-content: center; }
+.feature-modal { background: white; border-radius: 20px; padding: 28px; width: 90%; max-width: 480px; max-height: 80vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.3); z-index: 1000; position: relative; }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 .modal-header h3 { color: #1a0f0a; font-size: 18px; font-weight: 800; margin: 0; }
 .modal-close { background: none; border: none; cursor: pointer; color: #8b7355; font-size: 18px; }
