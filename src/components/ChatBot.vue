@@ -596,7 +596,7 @@ export default {
       }
     },
     async sendMessage() {
-      if (this.userInput.trim() === '') return
+      if (this.userInput.trim() === '' && !this.attachedFile) return
       if (this.userInput.trim().toUpperCase().startsWith('REQUEST:')) {
         const parts = this.userInput.replace(/^REQUEST:/i, '').trim()
         this.messages.push({ sender: 'user', text: this.userInput })
