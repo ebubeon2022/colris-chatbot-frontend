@@ -47,8 +47,13 @@
         <div class="loading-dots"><span></span><span></span><span></span></div>
         <p>Searching library catalogue...</p>
       </div>
-      <div v-else-if="searchResults.length === 0 && hasSearched" class="no-results">No books found for "{{ searchQuery }}"</div>
-      <div v-else class="book-grid">
+      <template v-else-if="hasSearched">
+        <a :href="colrisSearchUrl" target="_blank" class="colris-search-result-btn">
+          🔍 Search "{{ searchQuery }}" in COLRIS Library →
+        </a>
+        <p class="online-books-label">Free & Borrowable Online</p>
+        <div v-if="searchResults.length === 0" class="no-results">No freely accessible books found online for "{{ searchQuery }}"</div>
+        <div v-else class="book-grid">
         <div v-for="book in searchResults" :key="book.link" class="book-card">
           <div class="book-cover">
             <img v-if="book.cover" :src="book.cover" :alt="book.title" />
@@ -70,6 +75,7 @@
           </div>
         </div>
       </div>
+        </template>
     </div>
 
     <div v-else-if="showArrivals" class="search-panel">
@@ -307,6 +313,7 @@ export default {
       recognition: null,
       currentSessionId: null,
       showSearch: false,
+      colrisSearchUrl: '',
       showArrivals: false,
       showSaved: false,
       attachedFile: null,
@@ -545,19 +552,27 @@ export default {
       if (!this.searchQuery.trim()) return
       this.isSearching = true
       this.hasSearched = true
-      this.searchResults = []
+      this.colrisSearchUrl = 'https://colris.covenantuniversity.edu.ng/discovery/search?query=any,contains,' + encodeURIComponent(this.searchQuery) + '&tab=Everything&search_scope=MyInst_and_CI&vid=234COU_INST:VU1&lang=en&offset=0'
       try {
-        var token = localStorage.getItem('token')
-        var response = await axios.get('https://colris-chatbot-backend-production.up.railway.app/api/books/search', {
-          params: { query: this.searchQuery },
-          headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' },
+        var response = await axios.get('https://openlibrary.org/search.json?q=' + encodeURIComponent(this.searchQuery) + '&limit=10&fields=title,author_name,ia,lending_edition_s,public_scan_b,cover_i,first_publish_year,publisher')
+        this.searchResults = (response.data.docs || []).filter(function(b) {
+          return b.public_scan_b || b.lending_edition_s || b.ia
+        }).slice(0, 6).map(function(b) {
+          return {
+            title: b.title,
+            author: b.author_name ? b.author_name[0] : 'Unknown',
+            year: b.first_publish_year || '',
+            publisher: b.publisher ? b.publisher[0] : '',
+            cover: b.cover_i ? 'https://covers.openlibrary.org/b/id/' + b.cover_i + '-M.jpg' : null,
+            subjects: [],
+            source: b.public_scan_b ? 'Free to Read' : 'Borrow Online',
+            link: b.ia ? 'https://archive.org/details/' + b.ia[0] : 'https://openlibrary.org/search?q=' + encodeURIComponent(b.title)
+          }
         })
-        this.searchResults = response.data.books || []
-      } catch (error) {
-        console.error('Search failed:', error)
-      } finally {
-        this.isSearching = false
+      } catch (e) {
+        this.searchResults = []
       }
+      this.isSearching = false
     },
     async loadSessionMessages(sessionId) {
       try {
@@ -693,6 +708,9 @@ export default {
 .search-bar input:focus { border-color: #c9a84c; box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
 .search-btn { background: #1a0f0a; border: none; color: white; padding: 0 24px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; height: 48px; transition: all 0.25s; letter-spacing: 0.4px; text-transform: uppercase; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 .search-btn:hover { background: #2c1810; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
+.colris-search-result-btn { display: block; background: rgba(201,168,76,0.12); border: 1.5px solid rgba(201,168,76,0.3); color: #8b5e3c; padding: 12px 16px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 700; transition: all 0.2s; text-align: center; margin-bottom: 12px; }
+.colris-search-result-btn:hover { background: rgba(201,168,76,0.2); color: #1a0f0a; }
+.online-books-label { font-size: 11px; font-weight: 700; color: #8b7355; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 .search-loading { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 60px; color: #8b7355; }
 .loading-dots { display: flex; gap: 6px; }
 .loading-dots span { width: 10px; height: 10px; background: #c9a84c; border-radius: 50%; animation: bounce 1.2s infinite ease-in-out; }
