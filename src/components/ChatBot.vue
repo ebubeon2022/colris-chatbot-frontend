@@ -1,7 +1,7 @@
 <template>
   <div class="chat-container">
     <div class="chat-header">
-      <button @click="$emit('open-sidebar')" class="menu-btn">☰</button>
+
       <div class="header-content">
         <div class="header-avatar">📚</div>
         <div>

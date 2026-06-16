@@ -31,7 +31,7 @@
       />
       <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false"></div>
 
-      <div class="sidebar" :class="{ open: sidebarOpen }">
+      <div class="sidebar" :class="{ open: sidebarOpen }" style="display:none">
         <div class="sidebar-header">
           <div class="sidebar-logo">
             <div class="logo-icon">📚</div>
