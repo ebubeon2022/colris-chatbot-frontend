@@ -207,12 +207,6 @@
     </div>
 
     <div v-if="!showSearch && !showArrivals" class="chat-input-area">
-      <div class="feature-toolbar">
-        <button @click="openBookRequest" class="toolbar-btn" title="Request a Book">📥 <span>Request Book</span></button>
-        <button @click="openCitation" class="toolbar-btn" title="Citation Generator">📝 <span>Citation</span></button>
-        <button @click="openMyRequests" class="toolbar-btn" title="My Book Requests">📋 <span>My Requests</span></button>
-        <button @click="openLatestArrivals" class="toolbar-btn arrivals-toolbar-btn" title="New Arrivals">🆕 <span>New Arrivals</span></button>
-      </div>
       <div class="chat-input">
         <button @click="toggleVoice" class="mic-btn" :class="{ recording: isRecording }">
           <span v-if="!isRecording">🎤</span>
