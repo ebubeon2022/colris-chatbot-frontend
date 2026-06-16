@@ -448,15 +448,16 @@ export default {
 .collapse-btn { background: none; border: none; cursor: pointer; color: #6b5a4e; padding: 4px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; margin-left: auto; }
 .collapse-btn:hover { color: #c9a84c; }
 .sidebar-head { display: flex; align-items: center; padding: 14px 10px 10px; border-bottom: 1px solid rgba(201,168,76,0.08); gap: 8px; }
-.profile-card { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.12); border-radius: 10px; padding: 14px; }
-.profile-avatar { width: 44px; height: 44px; border-radius: 50%; background: #c9a84c; color: #0f0905; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; flex-shrink: 0; }
-.profile-info { display: flex; flex-direction: column; gap: 3px; }
-.profile-name { color: #fdf6e3; font-size: 14px; font-weight: 700; }
+.profile-card { display: flex; flex-direction: column; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(92,61,46,0.15)); border: 1px solid rgba(201,168,76,0.2); border-radius: 14px; padding: 20px 14px; text-align: center; margin-bottom: 4px; }
+.profile-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #c9a84c, #e0c060); color: #0f0905; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; box-shadow: 0 4px 16px rgba(201,168,76,0.3); }
+.profile-info { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.profile-name { color: #fdf6e3; font-size: 15px; font-weight: 700; }
 .profile-email { color: #6b5a4e; font-size: 11px; }
-.profile-role { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; width: fit-content; }
-.profile-role.admin { background: rgba(201,168,76,0.15); color: #c9a84c; }
-.profile-role.student { background: rgba(22,163,74,0.12); color: #4ade80; }
-.panel-divider { font-size: 11px; font-weight: 700; color: #4a3728; text-transform: uppercase; letter-spacing: 1px; padding: 8px 0 4px; border-top: 1px solid rgba(201,168,76,0.08); margin-top: 4px; }
+.profile-role { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.profile-role.admin { background: rgba(201,168,76,0.2); color: #c9a84c; border: 1px solid rgba(201,168,76,0.3); }
+.profile-role.student { background: rgba(22,163,74,0.15); color: #4ade80; border: 1px solid rgba(22,163,74,0.3); }
+.panel-divider { font-size: 10px; font-weight: 700; color: #6b5a4e; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 0 6px; display: flex; align-items: center; gap: 8px; }
+.panel-divider::before, .panel-divider::after { content: ""; flex: 1; height: 1px; background: rgba(201,168,76,0.1); }
 .panel-slide-enter-active, .panel-slide-leave-active { transition: all 0.2s ease; }
 .panel-slide-enter-from, .panel-slide-leave-to { transform: translateX(-10px); opacity: 0; }
 </style>
