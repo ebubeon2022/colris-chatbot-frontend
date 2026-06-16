@@ -650,7 +650,7 @@ export default {
         return
       }
       var attachMeta = this.attachedFile ? { name: this.attachedFile.name, type: this.attachedFile.type } : null
-      this.messages.push({ sender: 'user', text: this.userInput, attachment: attachMeta })
+      this.messages.push({ sender: 'user', text: this.userInput || '', attachment: attachMeta })
       var userText = (this.userInput || '') + (fileContext ? '\n\n' + fileContext : '')
       this.userInput = ''
       this.attachedFile = null
