@@ -378,7 +378,8 @@ export default {
 .sidebar-bottom { padding: 8px; border-top: 1px solid rgba(201,168,76,0.08); }
 
 /* Slide Panel */
-.slide-panel { position: absolute; left: 220px; top: 0; width: 280px; height: 100vh; background: #1a0f0a; border-right: 1px solid rgba(201,168,76,0.12); display: flex; flex-direction: column; z-index: 50; box-shadow: 4px 0 20px rgba(0,0,0,0.3); }
+.slide-panel { position: fixed; left: 220px; top: 0; width: 280px; height: 100vh; background: #1a0f0a; border-right: 1px solid rgba(201,168,76,0.12); display: flex; flex-direction: column; z-index: 50; box-shadow: 4px 0 20px rgba(0,0,0,0.3); }
+.collapsed .slide-panel { left: 56px; }
 .panel-header { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid rgba(201,168,76,0.1); flex-shrink: 0; }
 .panel-header h3 { color: #fdf6e3; font-size: 14px; font-weight: 700; }
 .panel-close { background: none; border: none; cursor: pointer; color: #6b5a4e; transition: color 0.2s; padding: 4px; }
