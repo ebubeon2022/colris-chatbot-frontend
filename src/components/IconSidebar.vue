@@ -305,8 +305,8 @@ export default {
 </script>
 
 <style scoped>
-.icon-sidebar { display: flex; height: 100vh; position: relative; }
-.sidebar-icons { width: 56px; background: #111; border-right: 1px solid rgba(201,168,76,0.12); display: flex; flex-direction: column; justify-content: space-between; padding: 12px 0; flex-shrink: 0; }
+.icon-sidebar { display: flex; height: 100vh; position: relative; flex-shrink: 0; }
+.sidebar-icons { width: 56px; min-width: 56px; background: #1a0f0a; border-right: 1px solid rgba(201,168,76,0.15); display: flex; flex-direction: column; justify-content: space-between; padding: 12px 0; flex-shrink: 0; z-index: 10; }
 .icon-group { display: flex; flex-direction: column; gap: 4px; padding: 0 8px; }
 .icon-item { position: relative; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; cursor: pointer; color: #6b5a4e; transition: all 0.2s; }
 .icon-item:hover { background: rgba(201,168,76,0.12); color: #c9a84c; }
