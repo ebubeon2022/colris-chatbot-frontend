@@ -1,11 +1,15 @@
 <template>
-  <div class="icon-sidebar">
+  <div :class="['icon-sidebar', collapsed ? 'collapsed' : '']">
     <!-- Header -->
     <div class="sidebar-head">
-      <div class="sidebar-logo">
+      <div class="sidebar-logo" v-if="!collapsed">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         <span>COLRIS</span>
       </div>
+      <button @click="collapsed = !collapsed" class="collapse-btn" :title="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+        <svg v-if="collapsed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
     </div>
 
     <!-- Nav Items -->
@@ -218,6 +222,7 @@ export default {
   emits: ["new-chat", "open-arrivals", "logout", "open-admin", "load-session"],
   data() {
     return {
+      collapsed: true,
       activePanel: null,
       searchQuery: "", searchResults: [], isSearching: false, hasSearched: false,
       reqTitle: "", reqAuthor: "", reqReason: "", reqMsg: "", reqSuccess: false, isSubmitting: false,
@@ -312,8 +317,9 @@ export default {
 </script>
 
 <style scoped>
-.icon-sidebar { width: 220px; min-width: 220px; height: 100vh; background: #130d09; border-right: 1px solid rgba(201,168,76,0.1); display: flex; flex-direction: column; flex-shrink: 0; position: relative; overflow: visible; }
-.sidebar-head { padding: 16px 14px 8px; border-bottom: 1px solid rgba(201,168,76,0.08); }
+.icon-sidebar { width: 220px; min-width: 220px; height: 100vh; background: #130d09; border-right: 1px solid rgba(201,168,76,0.1); display: flex; flex-direction: column; flex-shrink: 0; position: relative; overflow: visible; transition: width 0.25s ease, min-width 0.25s ease; }
+.icon-sidebar.collapsed { width: 56px; min-width: 56px; }
+
 .sidebar-logo { display: flex; align-items: center; gap: 8px; color: #c9a84c; font-size: 14px; font-weight: 800; letter-spacing: 1px; }
 .sidebar-nav { flex: 1; overflow-y: auto; padding: 8px 8px; display: flex; flex-direction: column; gap: 2px; }
 .sidebar-nav::-webkit-scrollbar { width: 3px; }
@@ -392,6 +398,13 @@ export default {
 .stat-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(201,168,76,0.1); border-radius: 8px; padding: 14px 10px; text-align: center; }
 .stat-card-num { font-size: 24px; font-weight: 900; color: #c9a84c; }
 .stat-card-label { font-size: 10px; color: #4a3728; margin-top: 3px; }
+.collapsed .nav-btn span { display: none; }
+.collapsed .nav-divider { display: none; }
+.collapsed .sidebar-logo { display: none; }
+.collapsed .nav-badge { display: none; }
+.collapse-btn { background: none; border: none; cursor: pointer; color: #6b5a4e; padding: 4px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; margin-left: auto; }
+.collapse-btn:hover { color: #c9a84c; }
+.sidebar-head { display: flex; align-items: center; padding: 14px 10px 10px; border-bottom: 1px solid rgba(201,168,76,0.08); gap: 8px; }
 .panel-slide-enter-active, .panel-slide-leave-active { transition: all 0.2s ease; }
 .panel-slide-enter-from, .panel-slide-leave-to { transform: translateX(-10px); opacity: 0; }
 </style>
