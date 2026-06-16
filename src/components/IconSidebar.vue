@@ -278,7 +278,6 @@ export default {
         { paths: [{d:'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z'},{d:'M2 12h20'},{d:'M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'}], name: 'Google Scholar', desc: 'Academic search engine', url: 'https://scholar.google.com' },
         { paths: [{d:'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'},{d:'M15 3L21 3L21 9'},{d:'M10 14L21 3'}], name: 'IEEE Xplore', desc: 'Tech & Engineering', url: 'https://ieeexplore.ieee.org' },
         { paths: [{d:'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'},{d:'M15 3L21 3L21 9'},{d:'M10 14L21 3'}], name: 'JSTOR', desc: 'Academic journals', url: 'https://www.jstor.org' },
-        { paths: [{d:'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'},{d:'M15 3L21 3L21 9'},{d:'M10 14L21 3'}], name: 'PubMed', desc: 'Medical research', url: 'https://pubmed.ncbi.nlm.nih.gov' },
         { paths: [{d:'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'},{d:'M15 3L21 3L21 9'},{d:'M10 14L21 3'}], name: 'ResearchGate', desc: 'Research network', url: 'https://www.researchgate.net' },
         { paths: [{d:'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'},{d:'M15 3L21 3L21 9'},{d:'M10 14L21 3'}], name: 'ScienceDirect', desc: 'Scientific articles', url: 'https://www.sciencedirect.com' }
       ]
