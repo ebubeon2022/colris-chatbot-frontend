@@ -127,7 +127,16 @@
       <div v-for="(message, index) in messages" :key="index" :class="['message', message.sender]">
         <div class="message-avatar" v-if="message.sender === 'bot'">📚</div>
         <div style="display:flex;flex-direction:column;gap:8px;max-width:85%;">
-          <div class="message-bubble" v-html="formatMessage(message.text)"></div>
+          <div v-if="message.attachment" class="attachment-card">
+            <div class="attachment-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="attachment-info">
+              <div class="attachment-name">{{ message.attachment.name }}</div>
+              <div class="attachment-type">{{ message.attachment.type || 'Document' }}</div>
+            </div>
+          </div>
+          <div class="message-bubble" v-if="message.text" v-html="formatMessage(message.text)"></div>
           <div v-if="message.sender === 'bot' && !message.isFallback" class="message-actions">
             <button @click="thumbs(index, 'up')" :class="['action-btn', message.feedback === 'up' ? 'active-up' : '']" title="Helpful">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
@@ -838,6 +847,11 @@ export default {
 .req-badge.ordered { background: #fdf6e3; color: #8b5e3c; border: 1px solid #e8dcc8; }
 .req-date { font-size: 11px; color: #b8a898; }
 .req-note { margin-top: 6px; font-size: 12px; color: #5c3d2e; background: #fdf6e3; padding: 6px 10px; border-radius: 6px; }
+.attachment-card { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 10px 14px; margin-bottom: 6px; max-width: 220px; }
+.attachment-icon { width: 32px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fdf6e3; flex-shrink: 0; }
+.attachment-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+.attachment-name { color: #fdf6e3; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+.attachment-type { color: rgba(253,246,227,0.6); font-size: 11px; }
 .message-actions { display: flex; gap: 6px; margin-top: 4px; }
 .action-btn { background: transparent; border: 1px solid #e0d8cc; color: #a09080; width: 26px; height: 26px; border-radius: 6px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; padding: 0; }
 .action-btn:hover { border-color: #c9a84c; background: #fdf6e3; color: #5c3d2e; }
