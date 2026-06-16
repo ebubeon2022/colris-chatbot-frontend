@@ -639,12 +639,8 @@ export default {
         this.messages.push({ sender: 'bot', text: '📝 **' + style + ' Citation:**\n\n' + citation, isFallback: false })
         return
       }
-      // Include attached file content in message if present
-      if (this.attachedContent) {
-        var fileContext = '\n\n[ATTACHED FILE: ' + (this.attachedFile ? this.attachedFile.name : 'file') + ']\n' + this.attachedContent.substring(0, 3000)
-        var originalInput = this.userInput
-        this.userInput = originalInput + fileContext
-      }
+      // File context sent to API only - never shown in chat
+      var fileContext = this.attachedContent ? this.attachedContent.substring(0, 3000) : ''
       var msg = this.userInput.toLowerCase()
       if (msg.indexOf('new arrival') !== -1 || msg.indexOf('latest arrival') !== -1 || msg.indexOf('new book') !== -1 || msg.indexOf('recently added') !== -1) {
         this.messages.push({ sender: 'user', text: this.userInput })
@@ -655,7 +651,7 @@ export default {
       }
       var attachMeta = this.attachedFile ? { name: this.attachedFile.name, type: this.attachedFile.type } : null
       this.messages.push({ sender: 'user', text: this.userInput, attachment: attachMeta })
-      var userText = this.userInput + (this.attachedContent ? '\n\n' + this.attachedContent : '')
+      var userText = (this.userInput || '') + (fileContext ? '\n\n' + fileContext : '')
       this.userInput = ''
       this.attachedFile = null
       this.attachedContent = ''
