@@ -178,7 +178,7 @@ export default {
 
 <style scoped>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-.landing { background: #ffffff; color: #f5f3ff; font-family: "Segoe UI", Arial, sans-serif; min-height: 100vh; overflow-x: hidden; }
+.landing { background: linear-gradient(135deg, #1e0a2e 0%, #2d1457 50%, #1e0a2e 100%); color: #f5f3ff; font-family: "Segoe UI", Arial, sans-serif; min-height: 100vh; overflow-x: hidden; }
 
 /* Animated background */
 .landing::before { content: ""; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.06) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(26,15,10,0.8) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(92,61,46,0.04) 0%, transparent 70%); animation: bgPulse 8s ease-in-out infinite alternate; pointer-events: none; z-index: 0; }
@@ -204,7 +204,7 @@ export default {
 @keyframes badgePulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(124,58,237,0.2); } 50% { box-shadow: 0 0 0 6px rgba(124,58,237,0); } }
 .hero-title { font-size: 56px; font-weight: 900; line-height: 1.1; margin-bottom: 24px; color: #f5f3ff; letter-spacing: -1px; }
 .gold { color: #7c3aed; text-shadow: 0 0 40px rgba(124,58,237,0.4); }
-.hero-sub { font-size: 16px; color: #b8a898; line-height: 1.7; margin-bottom: 40px; max-width: 500px; }
+.hero-sub { font-size: 16px; color: #c4b5fd; line-height: 1.7; margin-bottom: 40px; max-width: 500px; }
 .hero-actions { display: flex; gap: 16px; margin-bottom: 48px; }
 .btn-primary { background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #ffffff; border: none; padding: 14px 32px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(124,58,237,0.3); }
 .btn-primary:hover { background: #a78bfa; transform: translateY(-2px); }
