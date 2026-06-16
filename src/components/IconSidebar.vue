@@ -187,6 +187,25 @@
           </div>
         </div>
 
+        <div v-if="activePanel === 'profile'" class="panel-content">
+          <div class="profile-card">
+            <div class="profile-avatar">{{ user && user.name ? user.name[0].toUpperCase() : 'U' }}</div>
+            <div class="profile-info">
+              <div class="profile-name">{{ user && user.name }}</div>
+              <div class="profile-email">{{ user && user.email }}</div>
+              <span :class="['profile-role', user && user.role === 'admin' ? 'admin' : 'student']">{{ user && user.role }}</span>
+            </div>
+          </div>
+          <div class="panel-divider">Change Password</div>
+          <div class="panel-form">
+            <input v-model="pwCurrent" type="password" placeholder="Current Password" class="panel-input" />
+            <input v-model="pwNew" type="password" placeholder="New Password" class="panel-input" />
+            <input v-model="pwConfirm" type="password" placeholder="Confirm New Password" class="panel-input" />
+            <div v-if="pwMsg" :class="['panel-msg', pwSuccess ? 'success' : 'error']">{{ pwMsg }}</div>
+            <button @click="changePassword" class="panel-submit-btn" :disabled="isChangingPw">{{ isChangingPw ? 'Updating...' : 'Update Password' }}</button>
+          </div>
+        </div>
+
         <div v-if="activePanel === 'stats'" class="panel-content">
           <p class="panel-desc">Your activity this session.</p>
           <div class="stats-grid">
@@ -201,6 +220,10 @@
 
     <!-- Bottom -->
     <div class="sidebar-bottom">
+      <button :class="['nav-btn', activePanel === 'profile' ? 'active' : '']" @click="toggle('profile')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile & Settings</span>
+      </button>
       <button class="nav-btn signout-btn" @click="$emit('logout')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         <span>Sign Out</span>
@@ -216,6 +239,7 @@ export default {
     savedAnswers: { type: Array, default: () => [] },
     stats: { type: Object, default: () => ({ questions: 0, requests: 0, citations: 0, saved: 0 }) },
     token: { type: String, default: "" },
+    user: { type: Object, default: () => ({}) },
     formatMessage: { type: Function, default: (t) => t },
     isAdmin: { type: Boolean, default: false }
   },
@@ -229,6 +253,7 @@ export default {
       citAuthor: "", citTitle: "", citYear: "", citPublisher: "", citCity: "", citStyle: "APA", citResult: "", citCopied: false,
       myRequests: [], loadingReqs: false, pendingCount: 0,
       conversations: [], loadingConvs: false,
+      pwCurrent: '', pwNew: '', pwConfirm: '', pwMsg: '', pwSuccess: false, isChangingPw: false,
       quickLinks: [
         { icon: "📚", name: "COLRIS", desc: "CU Library Catalogue", url: "https://colris.covenantuniversity.edu.ng" },
         { icon: "🔬", name: "JSTOR", desc: "Academic Journals", url: "https://www.jstor.org" },
@@ -243,7 +268,7 @@ export default {
   },
   computed: {
     panelTitle() {
-      const t = { conversations: "Conversations", search: "Search Books", request: "Request a Book", citation: "Citation Generator", myrequests: "My Requests", saved: "Saved Answers", links: "Quick Links", stats: "My Activity", arrivals: "New Arrivals" }
+      const t = { profile: 'Profile & Settings', conversations: "Conversations", search: "Search Books", request: "Request a Book", citation: "Citation Generator", myrequests: "My Requests", saved: "Saved Answers", links: "Quick Links", stats: "My Activity", arrivals: "New Arrivals" }
       return t[this.activePanel] || ""
     }
   },
@@ -254,6 +279,23 @@ export default {
       if (diff < 86400000) return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
       if (diff < 604800000) return d.toLocaleDateString([], { weekday: "short" })
       return d.toLocaleDateString([], { month: "short", day: "numeric" })
+    },
+    async changePassword() {
+      if (!this.pwCurrent || !this.pwNew || !this.pwConfirm) { this.pwMsg = 'Please fill all fields.'; this.pwSuccess = false; return }
+      if (this.pwNew !== this.pwConfirm) { this.pwMsg = 'New passwords do not match.'; this.pwSuccess = false; return }
+      if (this.pwNew.length < 6) { this.pwMsg = 'Password must be at least 6 characters.'; this.pwSuccess = false; return }
+      this.isChangingPw = true
+      try {
+        const res = await fetch('https://colris-chatbot-backend-production.up.railway.app/api/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token },
+          body: JSON.stringify({ current_password: this.pwCurrent, new_password: this.pwNew })
+        })
+        const data = await res.json()
+        if (res.ok) { this.pwSuccess = true; this.pwMsg = 'Password updated successfully!'; this.pwCurrent = ''; this.pwNew = ''; this.pwConfirm = '' }
+        else { this.pwSuccess = false; this.pwMsg = data.message || 'Failed to update password.' }
+      } catch (e) { this.pwSuccess = false; this.pwMsg = 'Network error. Try again.' }
+      this.isChangingPw = false
     },
     async loadConversations() {
       this.loadingConvs = true
@@ -405,6 +447,15 @@ export default {
 .collapse-btn { background: none; border: none; cursor: pointer; color: #6b5a4e; padding: 4px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; margin-left: auto; }
 .collapse-btn:hover { color: #c9a84c; }
 .sidebar-head { display: flex; align-items: center; padding: 14px 10px 10px; border-bottom: 1px solid rgba(201,168,76,0.08); gap: 8px; }
+.profile-card { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.12); border-radius: 10px; padding: 14px; }
+.profile-avatar { width: 44px; height: 44px; border-radius: 50%; background: #c9a84c; color: #0f0905; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; flex-shrink: 0; }
+.profile-info { display: flex; flex-direction: column; gap: 3px; }
+.profile-name { color: #fdf6e3; font-size: 14px; font-weight: 700; }
+.profile-email { color: #6b5a4e; font-size: 11px; }
+.profile-role { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; width: fit-content; }
+.profile-role.admin { background: rgba(201,168,76,0.15); color: #c9a84c; }
+.profile-role.student { background: rgba(22,163,74,0.12); color: #4ade80; }
+.panel-divider { font-size: 11px; font-weight: 700; color: #4a3728; text-transform: uppercase; letter-spacing: 1px; padding: 8px 0 4px; border-top: 1px solid rgba(201,168,76,0.08); margin-top: 4px; }
 .panel-slide-enter-active, .panel-slide-leave-active { transition: all 0.2s ease; }
 .panel-slide-enter-from, .panel-slide-leave-to { transform: translateX(-10px); opacity: 0; }
 </style>

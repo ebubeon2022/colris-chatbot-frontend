@@ -26,6 +26,7 @@
         :token="userToken"
         :format-message="formatMessage"
         :is-admin="currentUser && currentUser.role === 'admin'"
+        :user="currentUser"
         @new-chat="handleNewSession"
         @open-arrivals="openArrivals"
         @open-admin="currentView = 'admin'"
