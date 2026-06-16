@@ -122,10 +122,7 @@
           <button class="chip" @click="quickAsk('What are the library rules?')">📋 Rules</button>
           <button class="chip arrivals-chip" @click="openLatestArrivals">🆕 New Arrivals</button>
         </div>
-        <div class="did-you-know">
-          <span class="dyk-label">📖 Did you know?</span>
-          <span class="dyk-text">{{ didYouKnowTip }}</span>
-        </div>
+
       </div>
       <div v-for="(message, index) in messages" :key="index" :class="['message', message.sender]">
         <div class="message-avatar" v-if="message.sender === 'bot'">📚</div>
