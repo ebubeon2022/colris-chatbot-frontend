@@ -123,6 +123,11 @@ export default {
       this.loadHistory()
     }
   },
+  computed: {
+    userToken() {
+      return localStorage.getItem('token') || ''
+    }
+  },
   methods: {
     handleLoginSuccess(data) {
       this.currentUser = data.user
