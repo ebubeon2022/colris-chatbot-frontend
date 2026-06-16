@@ -425,15 +425,15 @@ export default {
       const reader = new FileReader()
       reader.onload = (e) => {
         if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
-          this.attachedContent = '[PDF FILE: ' + file.name + '] The user has uploaded a PDF. Please acknowledge you received it and ask what they need help with regarding this document.'
+          this.attachedContent = 'User attached a PDF: ' + file.name
         } else {
           this.attachedContent = e.target.result
         }
       }
       if (file.type.startsWith('image')) {
-        this.attachedContent = '[IMAGE: ' + file.name + '] User attached an image.'
+        this.attachedContent = 'User attached an image file: ' + file.name
       } else if (file.type === 'application/pdf') {
-        this.attachedContent = '[PDF: ' + file.name + '] User attached a PDF. Help them and suggest COLRIS resources.'
+        this.attachedContent = 'User attached a PDF document: ' + file.name + '. Help them and suggest related COLRIS resources.'
       } else {
         reader.readAsText(file)
       }
