@@ -9,11 +9,13 @@
       v-else-if="currentView === 'register'"
       @login-success="handleLoginSuccess"
       @show-login="currentView = 'login'"
+      @show-landing="currentView = 'landing'"
     />
     <Login
       v-else-if="currentView === 'login'"
       @login-success="handleLoginSuccess"
       @show-register="currentView = 'register'"
+      @show-landing="currentView = 'landing'"
     />
     <Admin v-else-if="currentView === 'admin'" @back="currentView = 'chat'" />
     <div v-else class="app-layout">

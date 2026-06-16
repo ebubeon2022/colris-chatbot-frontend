@@ -65,6 +65,9 @@
         <p v-if="!showForgot" class="switch-link">
           Don't have an account? <span @click="$emit('show-register')">Register here</span>
         </p>
+        <p class="switch-link" style="margin-top:8px;">
+          <span @click="$emit('show-landing')" class="forgot-link">← Back to Home</span>
+        </p>
       </div>
     </div>
   </div>
