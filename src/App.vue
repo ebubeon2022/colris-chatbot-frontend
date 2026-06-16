@@ -20,7 +20,7 @@
     <Admin v-else-if="currentView === 'admin'" @back="currentView = 'chat'" />
     <div v-else class="app-layout">
       <IconSidebar
-        v-if="currentUser && currentUser.role !== 'admin'"
+        v-if="currentUser"
         :saved-answers="savedAnswers"
         :stats="sessionStats"
         :token="userToken"
