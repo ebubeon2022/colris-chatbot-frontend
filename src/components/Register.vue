@@ -77,6 +77,9 @@
           <p class="switch-link">
             Already have an account? <span @click="$emit('show-login')">Sign In</span>
           </p>
+          <p class="switch-link" style="margin-top:8px;">
+            <span @click="$emit('show-landing')" style="color:#8b5e3c;cursor:pointer;font-weight:600;">← Back to Home</span>
+          </p>
         </div>
 
         <div v-else-if="step === 'otp'">
@@ -119,7 +122,7 @@
 import axios from 'axios'
 export default {
   name: 'Register',
-  emits: ['login-success', 'show-login'],
+  emits: ['login-success', 'show-login', 'show-landing'],
   data() {
     return {
       step: 'register',
