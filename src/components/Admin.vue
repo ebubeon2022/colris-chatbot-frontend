@@ -472,16 +472,22 @@
               <td>{{ req.author || '-' }}</td>
               <td style="max-width:180px;font-size:12px;color:#5c3d2e;">{{ req.reason || '-' }}</td>
               <td>
-                <select @change="updateRequest(req.id, $event.target.value, req.admin_note)" class="role-select">
-                  <option value="pending" :selected="req.status === 'pending'">Pending</option>
-                  <option value="approved" :selected="req.status === 'approved'">Approved</option>
-                  <option value="ordered" :selected="req.status === 'ordered'">Ordered</option>
-                  <option value="rejected" :selected="req.status === 'rejected'">Rejected</option>
-                </select>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <select v-model="req.status" class="role-select">
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="ordered">Ordered</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                  <button @click="updateRequest(req.id, req.status, req.admin_note)" class="save-req-btn">✓</button>
+                </div>
               </td>
               <td class="date-cell">{{ new Date(req.created_at).toLocaleDateString() }}</td>
               <td>
-                <input v-model="req.admin_note" placeholder="Add note..." style="padding:4px 8px;border:1px solid #e8dcc8;border-radius:4px;font-size:12px;width:120px;" @blur="updateRequest(req.id, req.status, req.admin_note)" />
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <input v-model="req.admin_note" placeholder="Add note..." style="padding:4px 8px;border:1px solid #e8dcc8;border-radius:4px;font-size:12px;width:100px;" />
+                  <button @click="updateRequest(req.id, req.status, req.admin_note)" class="save-req-btn">✓</button>
+                </div>
               </td>
             </tr>
           </tbody>
