@@ -250,7 +250,7 @@ export default {
 
 .register-left {
   flex: 1;
-  background: linear-gradient(160deg, #2d1457 0%, #5c3d2e 60%, #6d28d9 100%);
+  background: linear-gradient(160deg, #2d1457 0%, #5b21b6 60%, #6d28d9 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -340,7 +340,7 @@ export default {
 
 .register-right {
   flex: 1;
-  background: #faf7f2;
+  background: #faf5ff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -371,7 +371,7 @@ export default {
 
 .input-group label {
   display: block;
-  color: #5c3d2e;
+  color: #5b21b6;
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 7px;
@@ -383,7 +383,7 @@ export default {
 .input-group input {
   width: 100%;
   padding: 12px 16px;
-  background: #faf7f2;
+  background: #faf5ff;
   border: 1.5px solid #ddd6fe;
   border-radius: 10px;
   color: #2d1457;
@@ -411,7 +411,7 @@ export default {
   padding: 0; display: flex; align-items: center;
   transition: color 0.2s, transform 0.2s;
 }
-.eye-btn:hover { color: #5c3d2e; transform: scale(1.15); }
+.eye-btn:hover { color: #5b21b6; transform: scale(1.15); }
 
 .pass-hint { margin-top: 6px; font-size: 12px; }
 .pass-ok { color: #16a34a; font-weight: 600; }
@@ -464,7 +464,7 @@ export default {
 .register-btn {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #5c3d2e 0%, #6d28d9 100%);
+  background: linear-gradient(135deg, #5b21b6 0%, #6d28d9 100%);
   color: #f5f3ff;
   border: none;
   border-radius: 12px;
@@ -495,7 +495,7 @@ export default {
 .register-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 28px rgba(92, 61, 46, 0.35);
-  background: linear-gradient(135deg, #2d1457 0%, #5c3d2e 100%);
+  background: linear-gradient(135deg, #2d1457 0%, #5b21b6 100%);
 }
 
 .register-btn:active { transform: translateY(0); }
@@ -521,7 +521,7 @@ export default {
   text-underline-offset: 3px;
   transition: color 0.2s;
 }
-.switch-link span:hover { color: #5c3d2e; }
+.switch-link span:hover { color: #5b21b6; }
 
 .success-screen {
   text-align: center;

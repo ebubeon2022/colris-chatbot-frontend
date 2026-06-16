@@ -147,7 +147,7 @@ export default {
 
 .login-left {
   flex: 1;
-  background: linear-gradient(160deg, #2d1457 0%, #5c3d2e 60%, #6d28d9 100%);
+  background: linear-gradient(160deg, #2d1457 0%, #5b21b6 60%, #6d28d9 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -251,7 +251,7 @@ export default {
 
 .login-right {
   flex: 1;
-  background: #faf7f2;
+  background: #faf5ff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -288,7 +288,7 @@ export default {
 
 .input-group label {
   display: block;
-  color: #5c3d2e;
+  color: #5b21b6;
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 8px;
@@ -300,7 +300,7 @@ export default {
 .input-group input {
   width: 100%;
   padding: 13px 16px;
-  background: #faf7f2;
+  background: #faf5ff;
   border: 1.5px solid #ddd6fe;
   border-radius: 10px;
   color: #2d1457;
@@ -320,7 +320,7 @@ export default {
 
 .forgot-link { color: #6d28d9; cursor: pointer; font-weight: 600; font-size: 13px; }
 .forgot-link:hover { text-decoration: underline; }
-.forgot-box { background: #faf7f2; border: 1.5px solid #ddd6fe; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.forgot-box { background: #faf5ff; border: 1.5px solid #ddd6fe; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
 .forgot-title { color: #1e0a2e; font-size: 16px; font-weight: 700; margin: 0 0 4px; }
 .forgot-sub { color: #7c3aed; font-size: 13px; margin: 0 0 16px; }
 .reset-msg { padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 12px; }
@@ -336,7 +336,7 @@ export default {
   padding: 0; display: flex; align-items: center;
   transition: color 0.2s, transform 0.2s;
 }
-.eye-btn:hover { color: #5c3d2e; transform: scale(1.15); }
+.eye-btn:hover { color: #5b21b6; transform: scale(1.15); }
 
 .error-message {
   background: #fef2f2;
@@ -360,7 +360,7 @@ export default {
 .login-btn {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #5c3d2e 0%, #6d28d9 100%);
+  background: linear-gradient(135deg, #5b21b6 0%, #6d28d9 100%);
   color: #f5f3ff;
   border: none;
   border-radius: 12px;
@@ -391,7 +391,7 @@ export default {
 .login-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 28px rgba(92, 61, 46, 0.35);
-  background: linear-gradient(135deg, #2d1457 0%, #5c3d2e 100%);
+  background: linear-gradient(135deg, #2d1457 0%, #5b21b6 100%);
 }
 
 .login-btn:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(92, 61, 46, 0.2); }
@@ -425,7 +425,7 @@ export default {
   text-underline-offset: 3px;
 }
 
-.switch-link span:hover { color: #5c3d2e; }
+.switch-link span:hover { color: #5b21b6; }
 
 @media (max-width: 768px) {
   .login-left { display: none; }
