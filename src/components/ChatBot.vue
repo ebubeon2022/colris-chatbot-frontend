@@ -708,8 +708,8 @@ export default {
 .search-bar input:focus { border-color: #c9a84c; box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
 .search-btn { background: #1a0f0a; border: none; color: white; padding: 0 24px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; height: 48px; transition: all 0.25s; letter-spacing: 0.4px; text-transform: uppercase; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 .search-btn:hover { background: #2c1810; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
-.colris-search-result-btn { display: block; background: rgba(201,168,76,0.12); border: 1.5px solid rgba(201,168,76,0.3); color: #8b5e3c; padding: 12px 16px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 700; transition: all 0.2s; text-align: center; margin-bottom: 12px; }
-.colris-search-result-btn:hover { background: rgba(201,168,76,0.2); color: #1a0f0a; }
+.colris-search-result-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #1a0f0a; border: none; color: #c9a84c; padding: 14px 20px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 700; transition: all 0.2s; text-align: center; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+.colris-search-result-btn:hover { background: #2c1810; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
 .online-books-label { font-size: 11px; font-weight: 700; color: #8b7355; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 .search-loading { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 60px; color: #8b7355; }
 .loading-dots { display: flex; gap: 6px; }
