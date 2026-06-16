@@ -33,56 +33,42 @@
       <div v-else>
         <div class="stats-grid">
           <div class="stat-card" style="cursor:pointer" @click="goToTab('users')">
-            <div class="stat-icon">👥</div>
+            <div class="stat-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
             <div class="stat-info">
               <div class="stat-number">{{ stats.total_users }}</div>
               <div class="stat-label">Total Users</div>
             </div>
           </div>
-          <div class="stat-card" style="cursor:pointer" @click="goToTab('users')">
-            <div class="stat-icon">🎓</div>
-            <div class="stat-info">
-              <div class="stat-number">{{ stats.total_students }}</div>
-              <div class="stat-label">Students</div>
-            </div>
-          </div>
           <div class="stat-card" style="cursor:pointer" @click="goToTab('logs')">
-            <div class="stat-icon">💬</div>
+            <div class="stat-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
             <div class="stat-info">
               <div class="stat-number">{{ stats.total_messages }}</div>
               <div class="stat-label">Total Messages</div>
             </div>
           </div>
           <div class="stat-card" style="cursor:pointer" @click="goToTab('logs')">
-            <div class="stat-icon">🗂</div>
+            <div class="stat-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
             <div class="stat-info">
               <div class="stat-number">{{ stats.total_sessions }}</div>
               <div class="stat-label">Conversations</div>
             </div>
           </div>
           <div class="stat-card" style="cursor:pointer" @click="goToTab('books')">
-            <div class="stat-icon">📚</div>
+            <div class="stat-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
             <div class="stat-info">
               <div class="stat-number">{{ stats.total_books }}</div>
               <div class="stat-label">Books in Catalogue</div>
             </div>
           </div>
-          <div class="stat-card" style="cursor:pointer" @click="goToTab('books')">
-            <div class="stat-icon">🆕</div>
-            <div class="stat-info">
-              <div class="stat-number">{{ stats.new_arrivals }}</div>
-              <div class="stat-label">New Arrivals</div>
-            </div>
-          </div>
           <div class="stat-card" style="cursor:pointer" @click="goToTab('knowledge')">
-            <div class="stat-icon">🧠</div>
+            <div class="stat-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
             <div class="stat-info">
               <div class="stat-number">{{ stats.knowledge_entries }}</div>
               <div class="stat-label">Knowledge Entries</div>
             </div>
           </div>
           <div class="stat-card" style="cursor:pointer" @click="goToTab('logs')">
-            <div class="stat-icon">📅</div>
+            <div class="stat-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
             <div class="stat-info">
               <div class="stat-number">{{ stats.messages_today }}</div>
               <div class="stat-label">Messages Today</div>
