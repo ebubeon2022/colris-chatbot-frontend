@@ -177,34 +177,13 @@
     </div>
 
     <div v-if="!showSearch && !showArrivals" class="chat-input-area">
-      <div v-if="attachedFile" class="file-preview-bar">
-        <div class="file-preview-card">
-          <img v-if="attachedFile && attachedFile.type && attachedFile.type.startsWith('image')" :src="attachedPreviewUrl" class="file-preview-img" @error="$event.target.style.display='none'" />
-          <div v-else class="file-preview-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          </div>
-          <div class="file-preview-info">
-            <div class="file-preview-name">{{ attachedFile.name }}</div>
-            <div class="file-preview-size">{{ (attachedFile.size / 1024).toFixed(1) }} KB</div>
-          </div>
-          <button @click="removeFile" class="file-preview-remove">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-        </div>
-      </div>
+
       <div class="chat-input">
         <button @click="toggleVoice" class="mic-btn" :class="{ recording: isRecording }">
           <span v-if="!isRecording">🎤</span>
           <span v-else>⏹</span>
         </button>
-        <button @click="$refs.fileInput.click()" class="attach-btn" title="Attach file">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-        </button>
-        <input ref="fileInput" type="file" accept=".pdf,.png,.jpg,.jpeg,.txt,.doc,.docx" style="display:none" @change="handleFileUpload" />
-        <div v-if="attachedFile" class="attached-file">
-          <span>📎 {{ attachedFile.name }}</span>
-          <button @click="attachedFile = null; attachedContent = ''" class="remove-file">✕</button>
-        </div>
+
         <input v-model="userInput" @keyup.enter="sendMessage" placeholder="Ask about books, hours, fines, databases, or anything else..." type="text" :disabled="isLoading" />
         <button @click="sendMessage" :disabled="isLoading" class="send-btn">
           <span v-if="!isLoading">➤</span>
@@ -596,7 +575,7 @@ export default {
       }
     },
     async sendMessage() {
-      if (this.userInput.trim() === '' && !this.attachedFile) return
+      if (this.userInput.trim() === '') return
       if (this.userInput.trim().toUpperCase().startsWith('REQUEST:')) {
         const parts = this.userInput.replace(/^REQUEST:/i, '').trim()
         this.messages.push({ sender: 'user', text: this.userInput })
@@ -639,8 +618,7 @@ export default {
         this.messages.push({ sender: 'bot', text: '📝 **' + style + ' Citation:**\n\n' + citation, isFallback: false })
         return
       }
-      // File context sent to API only - never shown in chat
-      var fileContext = this.attachedContent ? this.attachedContent.substring(0, 3000) : ''
+
       var msg = this.userInput.toLowerCase()
       if (msg.indexOf('new arrival') !== -1 || msg.indexOf('latest arrival') !== -1 || msg.indexOf('new book') !== -1 || msg.indexOf('recently added') !== -1) {
         this.messages.push({ sender: 'user', text: this.userInput })
@@ -653,10 +631,7 @@ export default {
       this.messages.push({ sender: 'user', text: this.userInput || '', attachment: attachMeta })
       var userText = (this.userInput || '') + (fileContext ? '\n\n' + fileContext : '')
       this.userInput = ''
-      this.attachedFile = null
-      this.attachedContent = ''
-      this.attachedPreviewUrl = ''
-      if (this.$refs.fileInput) this.$refs.fileInput.value = ''
+
       this.isLoading = true
       try {
         var token = localStorage.getItem('token')
