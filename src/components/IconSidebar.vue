@@ -189,7 +189,7 @@
           <p class="panel-desc">One-tap access to academic databases.</p>
           <div class="links-grid">
             <a v-for="link in quickLinks" :key="link.name" :href="link.url" target="_blank" class="link-card">
-              <div class="link-icon">{{ link.icon }}</div>
+              <div class="link-icon-svg" v-html="link.svg"></div>
               <div class="link-name">{{ link.name }}</div>
               <div class="link-desc">{{ link.desc }}</div>
             </a>
@@ -451,7 +451,7 @@ export default {
 .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
 .link-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(201,168,76,0.1); border-radius: 8px; padding: 10px 8px; text-decoration: none; transition: all 0.2s; display: block; }
 .link-card:hover { border-color: #c9a84c; background: rgba(201,168,76,0.07); }
-.link-icon { font-size: 18px; margin-bottom: 4px; }
+.link-icon-svg { width: 32px; height: 32px; background: rgba(201,168,76,0.12); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #c9a84c; margin-bottom: 6px; padding: 6px; }
 .link-name { color: #fdf6e3; font-size: 11px; font-weight: 700; margin-bottom: 2px; }
 .link-desc { color: #4a3728; font-size: 10px; }
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
