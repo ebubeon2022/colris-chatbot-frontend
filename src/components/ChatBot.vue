@@ -161,7 +161,7 @@
             <p class="handoff-title">🧑‍💼 Need more help?</p>
             <p class="handoff-sub">A librarian can assist you directly.</p>
             <div class="handoff-actions">
-              <a href="https://clr.covenantuniversity.edu.ng/ask-a-librarian/" class="handoff-btn primary">✉️ Contact a Librarian</a>
+              <a href="https://clr.covenantuniversity.edu.ng/ask-a-librarian/" target="_blank" class="handoff-btn primary">✉️ Contact a Librarian</a>
             </div>
             <div class="handoff-suggestions">
               <p class="suggestions-label">Or try one of these:</p>
