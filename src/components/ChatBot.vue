@@ -430,10 +430,12 @@ export default {
           this.attachedContent = e.target.result
         }
       }
-      if (file.type.startsWith('text') || file.name.endsWith('.txt')) {
-        reader.readAsText(file)
+      if (file.type.startsWith('image')) {
+        this.attachedContent = '[IMAGE: ' + file.name + '] User attached an image.'
+      } else if (file.type === 'application/pdf') {
+        this.attachedContent = '[PDF: ' + file.name + '] User attached a PDF. Help them and suggest COLRIS resources.'
       } else {
-        reader.readAsDataURL(file)
+        reader.readAsText(file)
       }
     },
     async openBookRequest() {
