@@ -147,7 +147,7 @@ export default {
 
 .login-left {
   flex: 1;
-  background: linear-gradient(160deg, #2c1810 0%, #5c3d2e 60%, #8b5e3c 100%);
+  background: linear-gradient(160deg, #2d1457 0%, #5c3d2e 60%, #6d28d9 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -162,7 +162,7 @@ export default {
   position: absolute;
   top: -120px; right: -120px;
   width: 420px; height: 420px;
-  background: rgba(201, 168, 76, 0.08);
+  background: rgba(124, 58, 237, 0.08);
   border-radius: 50%;
   animation: pulse 4s ease-in-out infinite;
 }
@@ -172,7 +172,7 @@ export default {
   position: absolute;
   bottom: -80px; left: -80px;
   width: 300px; height: 300px;
-  background: rgba(201, 168, 76, 0.06);
+  background: rgba(124, 58, 237, 0.06);
   border-radius: 50%;
   animation: pulse 4s ease-in-out infinite reverse;
 }
@@ -191,25 +191,25 @@ export default {
 .logo-icon {
   font-size: 36px;
   width: 72px; height: 72px;
-  background: rgba(201, 168, 76, 0.2);
+  background: rgba(124, 58, 237, 0.2);
   border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  border: 1px solid rgba(201, 168, 76, 0.35);
+  border: 1px solid rgba(124, 58, 237, 0.35);
   transition: transform 0.3s, box-shadow 0.3s;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
-.logo-icon:hover { transform: scale(1.08) rotate(-3deg); box-shadow: 0 8px 30px rgba(201, 168, 76, 0.25); }
+.logo-icon:hover { transform: scale(1.08) rotate(-3deg); box-shadow: 0 8px 30px rgba(124, 58, 237, 0.25); }
 
 .brand h1 {
   font-size: 38px;
   font-weight: 800;
   letter-spacing: 4px;
   margin: 0 0 8px;
-  color: #fdf6e3;
+  color: #f5f3ff;
 }
 
 .brand p { font-size: 14px; color: rgba(253, 246, 227, 0.65); margin: 0; }
@@ -231,7 +231,7 @@ export default {
   padding: 14px 18px;
   background: rgba(255, 255, 255, 0.07);
   border-radius: 12px;
-  border: 1px solid rgba(201, 168, 76, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.15);
   transition: all 0.25s ease;
   cursor: default;
   animation: slideUp 0.6s ease both;
@@ -243,10 +243,10 @@ export default {
 .feature:nth-child(4) { animation-delay: 0.4s; }
 
 .feature:hover {
-  background: rgba(201, 168, 76, 0.12);
-  border-color: rgba(201, 168, 76, 0.35);
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(124, 58, 237, 0.35);
   transform: translateX(8px);
-  color: #fdf6e3;
+  color: #f5f3ff;
 }
 
 .login-right {
@@ -275,14 +275,14 @@ export default {
 .card-header { margin-bottom: 32px; }
 
 .login-card h2 {
-  color: #2c1810;
+  color: #2d1457;
   font-size: 26px;
   font-weight: 800;
   margin: 0 0 6px;
   font-family: 'Georgia', serif;
 }
 
-.subtitle { color: #8b7355; font-size: 14px; margin: 0; }
+.subtitle { color: #7c3aed; font-size: 14px; margin: 0; }
 
 .input-group { margin-bottom: 20px; }
 
@@ -295,15 +295,15 @@ export default {
   transition: color 0.2s;
 }
 
-.input-group:focus-within label { color: #c9a84c; }
+.input-group:focus-within label { color: #7c3aed; }
 
 .input-group input {
   width: 100%;
   padding: 13px 16px;
   background: #faf7f2;
-  border: 1.5px solid #e8dcc8;
+  border: 1.5px solid #ddd6fe;
   border-radius: 10px;
-  color: #2c1810;
+  color: #2d1457;
   font-size: 14px;
   outline: none;
   transition: all 0.25s ease;
@@ -312,17 +312,17 @@ export default {
 .input-group input::placeholder { color: #c4b49a; }
 
 .input-group input:focus {
-  border-color: #c9a84c;
+  border-color: #7c3aed;
   background: white;
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
   transform: translateY(-1px);
 }
 
-.forgot-link { color: #8b5e3c; cursor: pointer; font-weight: 600; font-size: 13px; }
+.forgot-link { color: #6d28d9; cursor: pointer; font-weight: 600; font-size: 13px; }
 .forgot-link:hover { text-decoration: underline; }
-.forgot-box { background: #faf7f2; border: 1.5px solid #e8dcc8; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
-.forgot-title { color: #1a0f0a; font-size: 16px; font-weight: 700; margin: 0 0 4px; }
-.forgot-sub { color: #8b7355; font-size: 13px; margin: 0 0 16px; }
+.forgot-box { background: #faf7f2; border: 1.5px solid #ddd6fe; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.forgot-title { color: #1e0a2e; font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+.forgot-sub { color: #7c3aed; font-size: 13px; margin: 0 0 16px; }
 .reset-msg { padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 12px; }
 .reset-msg.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #16a34a; }
 .reset-msg.error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; }
@@ -332,7 +332,7 @@ export default {
 .eye-btn {
   position: absolute; right: 12px;
   background: none; border: none;
-  cursor: pointer; color: #8b7355;
+  cursor: pointer; color: #7c3aed;
   padding: 0; display: flex; align-items: center;
   transition: color 0.2s, transform 0.2s;
 }
@@ -360,8 +360,8 @@ export default {
 .login-btn {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #5c3d2e 0%, #8b5e3c 100%);
-  color: #fdf6e3;
+  background: linear-gradient(135deg, #5c3d2e 0%, #6d28d9 100%);
+  color: #f5f3ff;
   border: none;
   border-radius: 12px;
   font-size: 15px;
@@ -391,7 +391,7 @@ export default {
 .login-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 28px rgba(92, 61, 46, 0.35);
-  background: linear-gradient(135deg, #2c1810 0%, #5c3d2e 100%);
+  background: linear-gradient(135deg, #2d1457 0%, #5c3d2e 100%);
 }
 
 .login-btn:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(92, 61, 46, 0.2); }
@@ -401,7 +401,7 @@ export default {
 .loading-dots { display: flex; gap: 5px; align-items: center; }
 .loading-dots span {
   width: 7px; height: 7px;
-  background: #fdf6e3;
+  background: #f5f3ff;
   border-radius: 50%;
   animation: bounce 1.2s infinite ease-in-out;
 }
@@ -411,13 +411,13 @@ export default {
 
 .switch-link {
   text-align: center;
-  color: #8b7355;
+  color: #7c3aed;
   font-size: 13px;
   margin: 20px 0 0;
 }
 
 .switch-link span {
-  color: #8b5e3c;
+  color: #6d28d9;
   cursor: pointer;
   font-weight: 700;
   transition: color 0.2s;
