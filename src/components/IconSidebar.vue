@@ -189,7 +189,11 @@
           <p class="panel-desc">One-tap access to academic databases.</p>
           <div class="links-grid">
             <a v-for="link in quickLinks" :key="link.name" :href="link.url" target="_blank" class="link-card">
-              <div class="link-icon-svg" v-html="link.svg"></div>
+              <div class="link-icon-svg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path v-for="p in link.paths" :key="p.d" :d="p.d" v-bind="p.attrs || {}"/>
+                </svg>
+              </div>
               <div class="link-name">{{ link.name }}</div>
               <div class="link-desc">{{ link.desc }}</div>
             </a>
@@ -265,14 +269,18 @@ export default {
       colrisUrl: "",
       pwCurrent: '', pwNew: '', pwConfirm: '', pwMsg: '', pwSuccess: false, isChangingPw: false,
       quickLinks: [
-        { icon: "📚", name: "COLRIS", desc: "CU Library Catalogue", url: "https://colris.covenantuniversity.edu.ng" },
-        { icon: "🔬", name: "JSTOR", desc: "Academic Journals", url: "https://www.jstor.org" },
-        { icon: "💡", name: "IEEE Xplore", desc: "Tech & Engineering", url: "https://ieeexplore.ieee.org" },
-        { icon: "🌍", name: "Google Scholar", desc: "Academic Search", url: "https://scholar.google.com" },
-        { icon: "🧬", name: "PubMed", desc: "Medical Research", url: "https://pubmed.ncbi.nlm.nih.gov" },
-        { icon: "📖", name: "ResearchGate", desc: "Research Network", url: "https://www.researchgate.net" },
-        { icon: "🏛️", name: "Academia.edu", desc: "Academic Papers", url: "https://www.academia.edu" },
-        { icon: "📰", name: "ScienceDirect", desc: "Scientific Articles", url: "https://www.sciencedirect.com" }
+        { paths: [{d:'M4 19.5A2.5 2.5 0 0 1 6.5 17H20'},{d:'M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'}], name: 'Library Search', desc: 'Search COLRIS catalogue', url: 'https://colris.covenantuniversity.edu.ng/discovery/search?vid=234COU_INST:VU1&lang=en' },
+        { paths: [{d:'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'},{d:'M14 2L14 8L20 8',attrs:{fill:'none'}},{d:'M16 13L8 13'},{d:'M16 17L8 17'}], name: 'Journal Search', desc: 'Find academic journals', url: 'https://colris.covenantuniversity.edu.ng/discovery/jsearch?vid=234COU_INST:VU1&lang=en' },
+        { paths: [{d:'M21 5c0 1.66-4 3-9 3s-9-1.34-9-3'},{d:'M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5'},{d:'M21 12c0 1.66-4 3-9 3s-9-1.34-9-3'}], name: 'Database Search', desc: 'Search academic databases', url: 'https://colris.covenantuniversity.edu.ng/discovery/dbsearch?vid=234COU_INST:VU1&lang=en' },
+        { paths: [{d:'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'}], name: 'New Arrivals', desc: 'Latest library additions', url: 'https://clr.covenantuniversity.edu.ng/' },
+        { paths: [{d:'M3 3h7v7H3z'},{d:'M14 3h7v7h-7z'},{d:'M14 14h7v7h-7z'},{d:'M3 14h7v7H3z'}], name: 'Curated Collections', desc: 'CU curated resources', url: 'https://collections.clr.covenantuniversity.edu.ng/' },
+        { paths: [{d:'M21 21L16.65 16.65'},{d:'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z'}], name: 'Browse', desc: 'Browse by subject/author', url: 'https://colris.covenantuniversity.edu.ng/discovery/browse?vid=234COU_INST:VU1&lang=en' },
+        { paths: [{d:'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z'},{d:'M2 12h20'},{d:'M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'}], name: 'Google Scholar', desc: 'Academic search engine', url: 'https://scholar.google.com' },
+        { paths: [{d:'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'},{d:'M15 3L21 3L21 9'},{d:'M10 14L21 3'}], name: 'IEEE Xplore', desc: 'Tech & Engineering', url: 'https://ieeexplore.ieee.org' },
+        { paths: [{d:'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'},{d:'M15 3L21 3L21 9'},{d:'M10 14L21 3'}], name: 'JSTOR', desc: 'Academic journals', url: 'https://www.jstor.org' },
+        { paths: [{d:'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'},{d:'M15 3L21 3L21 9'},{d:'M10 14L21 3'}], name: 'PubMed', desc: 'Medical research', url: 'https://pubmed.ncbi.nlm.nih.gov' },
+        { paths: [{d:'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'},{d:'M15 3L21 3L21 9'},{d:'M10 14L21 3'}], name: 'ResearchGate', desc: 'Research network', url: 'https://www.researchgate.net' },
+        { paths: [{d:'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'},{d:'M15 3L21 3L21 9'},{d:'M10 14L21 3'}], name: 'ScienceDirect', desc: 'Scientific articles', url: 'https://www.sciencedirect.com' }
       ]
     }
   },
