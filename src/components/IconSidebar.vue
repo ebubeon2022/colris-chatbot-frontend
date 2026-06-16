@@ -3,7 +3,13 @@
     <div class="sidebar-icons">
       <div class="icon-group top">
 
-        <!-- Shared: New Chat -->
+        <!-- Conversations -->
+        <div :class="['icon-item', activePanel === 'conversations' ? 'active' : '']" @click="toggle('conversations'); loadConversations()" title="Conversations">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="icon-tooltip">Conversations</span>
+        </div>
+
+        <!-- New Chat -->
         <div class="icon-item" @click="$emit('new-chat')" title="New Chat">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="10" y1="10" x2="14" y2="10"/></svg>
           <span class="icon-tooltip">New Chat</span>
@@ -79,6 +85,20 @@
           <button @click="activePanel = null" class="panel-close">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
+        </div>
+
+        <!-- Conversations Panel -->
+        <div v-if="activePanel === 'conversations'" class="panel-content">
+          <button @click="$emit('new-chat'); activePanel = null" class="new-chat-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Conversation
+          </button>
+          <div v-if="loadingConvs" class="panel-loading">Loading...</div>
+          <div v-else-if="conversations.length === 0" class="panel-empty">No conversations yet.</div>
+          <div v-for="conv in conversations" :key="conv.session_id" class="conv-item" @click="$emit('load-session', conv.session_id); activePanel = null">
+            <div class="conv-title">{{ conv.first_message || 'New Conversation' }}</div>
+            <div class="conv-date">{{ formatDate(conv.started_at) }}</div>
+          </div>
         </div>
 
         <!-- Search Panel -->
@@ -209,7 +229,7 @@ export default {
     formatMessage: { type: Function, default: (t) => t },
     isAdmin: { type: Boolean, default: false }
   },
-  emits: ["new-chat", "open-arrivals", "logout", "search-books", "open-admin"],
+  emits: ["new-chat", "open-arrivals", "logout", "search-books", "open-admin", "load-session"],
   data() {
     return {
       activePanel: null,
@@ -232,6 +252,8 @@ export default {
       citResult: "",
       citCopied: false,
       myRequests: [],
+      conversations: [],
+      loadingConvs: false,
       loadingReqs: false,
       pendingCount: 0,
       quickLinks: [
@@ -248,7 +270,7 @@ export default {
   },
   computed: {
     panelTitle() {
-      const titles = { search: "Search Books", request: "Request a Book", citation: "Citation Generator", myrequests: "My Requests", saved: "Saved Answers", links: "Quick Links", stats: "My Activity", arrivals: "New Arrivals" }
+      const titles = { conversations: 'Conversations', search: "Search Books", request: "Request a Book", citation: "Citation Generator", myrequests: "My Requests", saved: "Saved Answers", links: "Quick Links", stats: "My Activity", arrivals: "New Arrivals" }
       return titles[this.activePanel] || ""
     }
   },
@@ -300,6 +322,25 @@ export default {
     copyCit() {
       navigator.clipboard.writeText(this.citResult).then(() => { this.citCopied = true; setTimeout(() => this.citCopied = false, 2000) })
     },
+    formatDate(dateStr) {
+      const d = new Date(dateStr)
+      const now = new Date()
+      const diff = now - d
+      if (diff < 86400000) return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      if (diff < 604800000) return d.toLocaleDateString([], { weekday: 'short' })
+      return d.toLocaleDateString([], { month: 'short', day: 'numeric' })
+    },
+    async loadConversations() {
+      this.loadingConvs = true
+      try {
+        const res = await fetch('https://colris-chatbot-backend-production.up.railway.app/api/chat/history', {
+          headers: { 'Authorization': 'Bearer ' + this.token, 'Accept': 'application/json' }
+        })
+        const data = await res.json()
+        this.conversations = data.history || []
+      } catch (e) { this.conversations = [] }
+      this.loadingConvs = false
+    },
     async loadMyRequests() {
       this.loadingReqs = true
       try {
@@ -326,6 +367,12 @@ export default {
 .icon-item.logout:hover { background: rgba(220,38,38,0.12); color: #ef4444; }
 .icon-tooltip { position: absolute; left: 52px; background: #1a0f0a; color: #fdf6e3; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 100; border: 1px solid rgba(201,168,76,0.2); }
 .icon-item:hover .icon-tooltip { opacity: 1; }
+.new-chat-btn { display: flex; align-items: center; gap: 8px; background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); color: #c9a84c; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; width: 100%; transition: all 0.2s; }
+.new-chat-btn:hover { background: rgba(201,168,76,0.25); }
+.conv-item { padding: 10px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+.conv-item:hover { background: rgba(255,255,255,0.05); border-color: rgba(201,168,76,0.15); }
+.conv-title { color: #fdf6e3; font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.conv-date { color: #6b5a4e; font-size: 11px; }
 .sidebar-divider { width: 32px; height: 1px; background: rgba(201,168,76,0.15); margin: 4px auto; }
 .badge { position: absolute; top: 4px; right: 4px; background: #c9a84c; color: #0f0905; width: 16px; height: 16px; border-radius: 50%; font-size: 9px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
 
