@@ -138,6 +138,8 @@ export default {
       registeredAsAdmin: false,
       countdown: 5,
       countdownTimer: null,
+      resendCooldown: 0,
+      resendTimer: null,
     }
   },
   beforeUnmount() {
