@@ -375,7 +375,7 @@
             <tr><th>#</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Actions</th></tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in users" :key="user.id">
+            <tr v-for="(user, index) in filteredUsers" :key="user.id">
               <td class="row-num">{{ index + 1 }}</td>
               <td><strong>{{ user.name }}</strong></td>
               <td>{{ user.email }}</td>
