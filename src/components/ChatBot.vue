@@ -173,6 +173,14 @@
           <span v-if="!isRecording">🎤</span>
           <span v-else>⏹</span>
         </button>
+        <button @click="$refs.fileInput.click()" class="attach-btn" title="Attach file">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        </button>
+        <input ref="fileInput" type="file" accept=".pdf,.png,.jpg,.jpeg,.txt,.doc,.docx" style="display:none" @change="handleFileUpload" />
+        <div v-if="attachedFile" class="attached-file">
+          <span>📎 {{ attachedFile.name }}</span>
+          <button @click="attachedFile = null; attachedContent = ''" class="remove-file">✕</button>
+        </div>
         <input v-model="userInput" @keyup.enter="sendMessage" placeholder="Ask about books, hours, fines, databases, or anything else..." type="text" :disabled="isLoading" />
         <button @click="sendMessage" :disabled="isLoading" class="send-btn">
           <span v-if="!isLoading">➤</span>
@@ -298,6 +306,8 @@ export default {
       showSearch: false,
       showArrivals: false,
       showSaved: false,
+      attachedFile: null,
+      attachedContent: '',
       savedAnswers: [],
       showBookRequest: false,
       showCitation: false,
@@ -382,6 +392,25 @@ export default {
       const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       this.savedAnswers.unshift({ text: text, time: now })
       this.showSaved = true
+    },
+    async handleFileUpload(event) {
+      const file = event.target.files[0]
+      if (!file) return
+      this.attachedFile = file
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+          this.attachedContent = '[PDF FILE: ' + file.name + '] The user has uploaded a PDF. Please acknowledge you received it and ask what they need help with regarding this document.'
+        } else {
+          this.attachedContent = e.target.result
+        }
+      }
+      if (file.type.startsWith('text') || file.name.endsWith('.txt')) {
+        reader.readAsText(file)
+      } else {
+        reader.readAsDataURL(file)
+      }
+      this.messages.push({ sender: 'bot', text: '📎 File attached: **' + file.name + '**\n\nWhat would you like to know about this file?', isFallback: false })
     },
     async openBookRequest() {
       this.messages.push({ sender: 'user', text: 'Request a Book' })
@@ -584,6 +613,12 @@ export default {
         this.messages.push({ sender: 'bot', text: '📝 **' + style + ' Citation:**\n\n' + citation, isFallback: false })
         return
       }
+      // Include attached file content in message if present
+      if (this.attachedContent) {
+        var fileContext = '\n\n[ATTACHED FILE: ' + (this.attachedFile ? this.attachedFile.name : 'file') + ']\n' + this.attachedContent.substring(0, 3000)
+        var originalInput = this.userInput
+        this.userInput = originalInput + fileContext
+      }
       var msg = this.userInput.toLowerCase()
       if (msg.indexOf('new arrival') !== -1 || msg.indexOf('latest arrival') !== -1 || msg.indexOf('new book') !== -1 || msg.indexOf('recently added') !== -1) {
         this.messages.push({ sender: 'user', text: this.userInput })
@@ -595,6 +630,9 @@ export default {
       this.messages.push({ sender: 'user', text: this.userInput })
       var userText = this.userInput
       this.userInput = ''
+      this.attachedFile = null
+      this.attachedContent = ''
+      if (this.$refs.fileInput) this.$refs.fileInput.value = ''
       this.isLoading = true
       try {
         var token = localStorage.getItem('token')
@@ -837,6 +875,11 @@ export default {
 @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-8px); } }
 
 /* ── INPUT BAR ── */
+.attach-btn { width: 36px; height: 36px; background: #faf7f2; border: 1.5px solid #e8dcc8; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #8b7355; transition: all 0.2s; flex-shrink: 0; }
+.attach-btn:hover { background: #fdf6e3; border-color: #c9a84c; color: #5c3d2e; }
+.attached-file { display: flex; align-items: center; gap: 6px; background: #fdf6e3; border: 1px solid #c9a84c; border-radius: 6px; padding: 4px 8px; font-size: 12px; color: #5c3d2e; white-space: nowrap; max-width: 150px; overflow: hidden; }
+.attached-file span { overflow: hidden; text-overflow: ellipsis; }
+.remove-file { background: none; border: none; cursor: pointer; color: #8b7355; font-size: 14px; padding: 0; line-height: 1; flex-shrink: 0; }
 .chat-input-old { display: none; }
 .chat-input input { flex: 1; padding: 12px 18px; border: 1.5px solid #e2d8cc; border-radius: 10px; font-size: 14px; outline: none; background: #f5f0e8; color: #1a0f0a; font-family: 'Segoe UI', Arial, sans-serif; transition: all 0.25s; }
 .chat-input input:focus { border-color: #c9a84c; background: white; box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
