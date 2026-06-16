@@ -684,6 +684,30 @@ export default {
       } catch (e) { this.feedbackList = [] }
       this.isLoadingFeedback = false
     },
+    exportUsers: function() {
+      var rows = [['#', 'Name', 'Email', 'Role', 'Joined']]
+      this.filteredUsers.forEach(function(u, i) {
+        rows.push([i+1, u.name, u.email, u.role, new Date(u.created_at).toLocaleDateString()])
+      })
+      var csv = rows.map(function(r) { return r.join(',') }).join('\n')
+      var blob = new Blob([csv], { type: 'text/csv' })
+      var url = URL.createObjectURL(blob)
+      var a = document.createElement('a')
+      a.href = url; a.download = 'colris_users.csv'; a.click()
+      URL.revokeObjectURL(url)
+    },
+    exportLogs: function() {
+      var rows = [['Student', 'Email', 'First Message', 'Messages', 'Date']]
+      this.filteredLogs.forEach(function(l) {
+        rows.push([l.user_name || '', l.user_email || '', (l.first_message || '').replace(/,/g, ' '), l.message_count, new Date(l.started_at).toLocaleDateString()])
+      })
+      var csv = rows.map(function(r) { return r.join(',') }).join('\n')
+      var blob = new Blob([csv], { type: 'text/csv' })
+      var url = URL.createObjectURL(blob)
+      var a = document.createElement('a')
+      a.href = url; a.download = 'colris_conversations.csv'; a.click()
+      URL.revokeObjectURL(url)
+    },
     loadBookRequests: async function() {
       this.isLoadingRequests = true
       try {
