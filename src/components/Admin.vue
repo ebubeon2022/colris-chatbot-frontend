@@ -631,6 +631,13 @@ export default {
       return this.books.filter(function(b) { return b.is_new_arrival }).length
     },
     totalMessages() { return this.logs.length },
+    filteredUsers() {
+      if (!this.userSearch) return this.users
+      var s = this.userSearch.toLowerCase()
+      return this.users.filter(function(u) {
+        return (u.name && u.name.toLowerCase().includes(s)) || (u.email && u.email.toLowerCase().includes(s))
+      })
+    },
     filteredLogs() {
       if (!this.logSearch) return this.logs
       var q = this.logSearch.toLowerCase()
