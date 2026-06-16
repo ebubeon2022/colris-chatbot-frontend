@@ -111,12 +111,21 @@
             </button>
           </div>
           <div v-if="isSearching" class="panel-loading">Searching...</div>
-          <div v-else-if="searchResults.length === 0 && hasSearched" class="panel-empty">No results for "{{ searchQuery }}"</div>
-          <div v-for="book in searchResults" :key="book.link" class="panel-book-item">
-            <div class="panel-book-title">{{ book.title }}</div>
-            <div class="panel-book-author">{{ book.author }}</div>
-            <a :href="book.link" target="_blank" class="panel-book-link">View in COLRIS →</a>
-          </div>
+          <template v-else-if="hasSearched">
+            <a :href="colrisUrl" target="_blank" class="colris-search-btn">
+              🔍 Search "{{ searchQuery }}" in COLRIS →
+            </a>
+            <div class="panel-section-label">Free Online Books</div>
+            <div v-if="searchResults.length === 0" class="panel-empty">No freely accessible books found online.</div>
+            <div v-for="book in searchResults" :key="book.link" class="panel-book-item">
+              <div class="panel-book-title">{{ book.title }}</div>
+              <div class="panel-book-author">{{ book.author }}</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="book-avail-badge">{{ book.available }}</span>
+                <a :href="book.link" target="_blank" class="panel-book-link">Read online →</a>
+              </div>
+            </div>
+          </template>
         </div>
 
         <div v-if="activePanel === 'request'" class="panel-content">
@@ -253,6 +262,7 @@ export default {
       citAuthor: "", citTitle: "", citYear: "", citPublisher: "", citCity: "", citStyle: "APA", citResult: "", citCopied: false,
       myRequests: [], loadingReqs: false, pendingCount: 0,
       conversations: [], loadingConvs: false,
+      colrisUrl: "",
       pwCurrent: '', pwNew: '', pwConfirm: '', pwMsg: '', pwSuccess: false, isChangingPw: false,
       quickLinks: [
         { icon: "📚", name: "COLRIS", desc: "CU Library Catalogue", url: "https://colris.covenantuniversity.edu.ng" },
@@ -311,12 +321,15 @@ export default {
     async searchBooks() {
       if (!this.searchQuery.trim()) return
       this.isSearching = true; this.hasSearched = true
+      this.colrisUrl = "https://colris.covenantuniversity.edu.ng/discovery/search?query=any,contains," + encodeURIComponent(this.searchQuery) + "&tab=Everything&search_scope=MyInst_and_CI&vid=234COU_INST:VU1&lang=en&offset=0"
       try {
-        const res = await fetch("https://openlibrary.org/search.json?q=" + encodeURIComponent(this.searchQuery) + "&limit=5")
+        const res = await fetch("https://openlibrary.org/search.json?q=" + encodeURIComponent(this.searchQuery) + "&limit=10&fields=title,author_name,ia,lending_edition_s,public_scan_b")
         const data = await res.json()
-        this.searchResults = (data.docs || []).slice(0, 5).map(b => ({
-          title: b.title, author: b.author_name ? b.author_name[0] : "Unknown",
-          link: "https://colris.covenantuniversity.edu.ng/discovery/search?query=any,contains," + encodeURIComponent(b.title) + "&tab=Everything&search_scope=MyInst_and_CI&vid=234COU_INST:VU1&lang=en&offset=0"
+        this.searchResults = (data.docs || []).filter(b => b.public_scan_b || b.lending_edition_s || b.ia).slice(0, 5).map(b => ({
+          title: b.title,
+          author: b.author_name ? b.author_name[0] : "Unknown",
+          link: b.ia ? "https://archive.org/details/" + b.ia[0] : "https://openlibrary.org/search?q=" + encodeURIComponent(b.title),
+          available: b.public_scan_b ? "Free to read" : "Borrow online"
         }))
       } catch (e) { this.searchResults = [] }
       this.isSearching = false
@@ -398,6 +411,10 @@ export default {
 .panel-search-bar input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.2); color: #fdf6e3; padding: 8px 10px; border-radius: 7px; font-size: 12px; outline: none; }
 .panel-search-bar input:focus { border-color: #c9a84c; }
 .panel-search-btn { background: #c9a84c; border: none; color: #0f0905; width: 34px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.colris-search-btn { display: block; background: rgba(201,168,76,0.12); border: 1.5px solid rgba(201,168,76,0.3); color: #c9a84c; padding: 10px 14px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600; transition: all 0.2s; text-align: center; }
+.colris-search-btn:hover { background: rgba(201,168,76,0.2); }
+.panel-section-label { font-size: 10px; font-weight: 700; color: #4a3728; text-transform: uppercase; letter-spacing: 1px; padding: 8px 0 4px; border-top: 1px solid rgba(201,168,76,0.08); }
+.book-avail-badge { font-size: 10px; color: #4ade80; background: rgba(22,163,74,0.12); padding: 2px 7px; border-radius: 4px; font-weight: 600; }
 .panel-book-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(201,168,76,0.1); border-radius: 8px; padding: 10px; }
 .panel-book-title { color: #fdf6e3; font-size: 12px; font-weight: 700; margin-bottom: 3px; }
 .panel-book-author { color: #8b7355; font-size: 11px; margin-bottom: 6px; }
