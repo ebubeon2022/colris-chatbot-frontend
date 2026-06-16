@@ -30,7 +30,7 @@
         @new-chat="handleNewSession"
         @open-arrivals="openArrivals"
         @open-admin="currentView = 'admin'"
-        @logout="logout"
+        @logout="handleLogout"
       />
       <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false"></div>
 
