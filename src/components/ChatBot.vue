@@ -435,7 +435,6 @@ export default {
       } else {
         reader.readAsDataURL(file)
       }
-      this.messages.push({ sender: 'bot', text: '📎 File attached: **' + file.name + '**\n\nWhat would you like to know about this file?', isFallback: false })
     },
     async openBookRequest() {
       this.messages.push({ sender: 'user', text: 'Request a Book' })
