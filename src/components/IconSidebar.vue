@@ -337,7 +337,10 @@ export default {
           headers: { 'Authorization': 'Bearer ' + this.token, 'Accept': 'application/json' }
         })
         const data = await res.json()
-        this.conversations = data.history || []
+        this.conversations = (data.history || []).map(c => ({
+          ...c,
+          first_message: c.first_message ? c.first_message.substring(0, 40) : 'New Conversation'
+        }))
       } catch (e) { this.conversations = [] }
       this.loadingConvs = false
     },
