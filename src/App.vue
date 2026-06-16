@@ -25,8 +25,10 @@
         :stats="sessionStats"
         :token="userToken"
         :format-message="formatMessage"
+        :is-admin="currentUser && currentUser.role === 'admin'"
         @new-chat="handleNewSession"
         @open-arrivals="openArrivals"
+        @open-admin="currentView = 'admin'"
         @logout="logout"
       />
       <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false"></div>
