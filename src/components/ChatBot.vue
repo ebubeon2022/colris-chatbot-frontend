@@ -653,8 +653,9 @@ export default {
         setTimeout(() => { this.openLatestArrivals() }, 800)
         return
       }
-      this.messages.push({ sender: 'user', text: this.userInput })
-      var userText = this.userInput
+      var attachMeta = this.attachedFile ? { name: this.attachedFile.name, type: this.attachedFile.type } : null
+      this.messages.push({ sender: 'user', text: this.userInput, attachment: attachMeta })
+      var userText = this.userInput + (this.attachedContent ? '\n\n' + this.attachedContent : '')
       this.userInput = ''
       this.attachedFile = null
       this.attachedContent = ''
