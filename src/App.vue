@@ -19,6 +19,16 @@
     />
     <Admin v-else-if="currentView === 'admin'" @back="currentView = 'chat'" />
     <div v-else class="app-layout">
+      <IconSidebar
+        v-if="currentUser && currentUser.role !== 'admin'"
+        :saved-answers="savedAnswers"
+        :stats="sessionStats"
+        :token="userToken"
+        :format-message="formatMessage"
+        @new-chat="handleNewSession"
+        @open-arrivals="openArrivals"
+        @logout="logout"
+      />
       <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false"></div>
 
       <div class="sidebar" :class="{ open: sidebarOpen }">
@@ -81,6 +91,7 @@
 <script>
 import Login from './components/Login.vue'
 import Landing from './components/Landing.vue'
+import IconSidebar from './components/IconSidebar.vue'
 import Register from './components/Register.vue'
 import ChatBot from './components/ChatBot.vue'
 import Admin from './components/Admin.vue'
@@ -88,11 +99,13 @@ import axios from 'axios'
 
 export default {
   name: 'App',
-  components: { Landing, Login, Register, ChatBot, Admin },
+  components: { Landing, Login, Register, ChatBot, Admin, IconSidebar },
   data() {
     return {
       currentView: 'landing',
       currentUser: null,
+      sessionStats: { questions: 0, requests: 0, citations: 0, saved: 0 },
+      savedAnswers: [],
       showLanding: true,
       selectedSession: null,
       chatKey: 0,
