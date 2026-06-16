@@ -3,7 +3,7 @@
     <div class="chat-header">
 
       <div class="header-content">
-        <div class="header-avatar" style="background:#c9a84c;color:#1a0f0a;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;flex-shrink:0;">CU</div>
+        <div class="header-avatar"><img src="/cu-logo.png" alt="CU" style="width:38px;height:38px;object-fit:contain;" /></div>
         <div>
           <h2>COLRIS Library Assistant</h2>
           <p class="header-status">
@@ -116,7 +116,7 @@
 
     <div v-else class="chat-messages" ref="messageContainer">
       <div class="welcome-banner" v-if="messages.length === 1">
-        <div class="welcome-icon" style="width:72px;height:72px;background:#c9a84c;color:#1a0f0a;font-weight:900;font-size:22px;display:flex;align-items:center;justify-content:center;border-radius:16px;margin:0 auto 16px;">CU</div>
+        <div class="welcome-icon"><img src="/cu-logo.png" alt="CU" style="width:72px;height:72px;object-fit:contain;" /></div>
         <h3>Welcome to COLRIS Library Assistant</h3>
         <p class="welcome-sub">Your 24/7 Covenant University Library companion — ask me anything</p>
         <div class="quick-chips">
