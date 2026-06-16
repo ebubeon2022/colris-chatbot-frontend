@@ -3,52 +3,63 @@
     <div class="sidebar-icons">
       <div class="icon-group top">
 
-        <div class="icon-item" @click="emit('new-chat')" title="New Chat">
+        <!-- Shared: New Chat -->
+        <div class="icon-item" @click="$emit('new-chat')" title="New Chat">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="10" y1="10" x2="14" y2="10"/></svg>
           <span class="icon-tooltip">New Chat</span>
         </div>
 
+        <!-- Shared: Search Books -->
         <div :class="['icon-item', activePanel === 'search' ? 'active' : '']" @click="toggle('search')" title="Search Books">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <span class="icon-tooltip">Search Books</span>
         </div>
 
-        <div :class="['icon-item', activePanel === 'request' ? 'active' : '']" @click="toggle('request')" title="Request Book">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <span class="icon-tooltip">Request Book</span>
-        </div>
-
-        <div :class="['icon-item', activePanel === 'citation' ? 'active' : '']" @click="toggle('citation')" title="Citation Generator">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          <span class="icon-tooltip">Citation Generator</span>
-        </div>
-
-        <div :class="['icon-item', activePanel === 'myrequests' ? 'active' : '']" @click="toggle('myrequests'); loadMyRequests()" title="My Requests">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          <span class="icon-tooltip">My Requests</span>
-          <span v-if="pendingCount > 0" class="badge">{{ pendingCount }}</span>
-        </div>
-
-        <div :class="['icon-item', activePanel === 'saved' ? 'active' : '']" @click="toggle('saved')" title="Saved Answers">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-          <span class="icon-tooltip">Saved Answers</span>
-          <span v-if="savedAnswers.length > 0" class="badge">{{ savedAnswers.length }}</span>
-        </div>
-
+        <!-- Shared: Quick Links -->
         <div :class="['icon-item', activePanel === 'links' ? 'active' : '']" @click="toggle('links')" title="Quick Links">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           <span class="icon-tooltip">Quick Links</span>
         </div>
 
-        <div :class="['icon-item', activePanel === 'stats' ? 'active' : '']" @click="toggle('stats')" title="My Activity">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          <span class="icon-tooltip">My Activity</span>
-        </div>
+        <!-- Admin only -->
+        <template v-if="isAdmin">
+          <div class="sidebar-divider"></div>
+          <div class="icon-item" @click="$emit('open-admin')" title="Admin Panel">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span class="icon-tooltip">Admin Panel</span>
+          </div>
+        </template>
 
-        <div :class="['icon-item', activePanel === 'arrivals' ? 'active' : '']" @click="toggle('arrivals'); $emit('open-arrivals')" title="New Arrivals">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="9" y1="9" x2="15" y2="9"/></svg>
-          <span class="icon-tooltip">New Arrivals</span>
-        </div>
+        <!-- Student only -->
+        <template v-if="!isAdmin">
+          <div class="sidebar-divider"></div>
+          <div :class="['icon-item', activePanel === 'request' ? 'active' : '']" @click="toggle('request')" title="Request Book">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span class="icon-tooltip">Request Book</span>
+          </div>
+          <div :class="['icon-item', activePanel === 'citation' ? 'active' : '']" @click="toggle('citation')" title="Citation Generator">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span class="icon-tooltip">Citation Generator</span>
+          </div>
+          <div :class="['icon-item', activePanel === 'myrequests' ? 'active' : '']" @click="toggle('myrequests'); loadMyRequests()" title="My Requests">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="icon-tooltip">My Requests</span>
+            <span v-if="pendingCount > 0" class="badge">{{ pendingCount }}</span>
+          </div>
+          <div :class="['icon-item', activePanel === 'saved' ? 'active' : '']" @click="toggle('saved')" title="Saved Answers">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <span class="icon-tooltip">Saved Answers</span>
+            <span v-if="savedAnswers.length > 0" class="badge">{{ savedAnswers.length }}</span>
+          </div>
+          <div :class="['icon-item', activePanel === 'stats' ? 'active' : '']" @click="toggle('stats')" title="My Activity">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span class="icon-tooltip">My Activity</span>
+          </div>
+          <div :class="['icon-item', activePanel === 'arrivals' ? 'active' : '']" @click="toggle('arrivals'); $emit('open-arrivals')" title="New Arrivals">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="9" y1="9" x2="15" y2="9"/></svg>
+            <span class="icon-tooltip">New Arrivals</span>
+          </div>
+        </template>
 
       </div>
 
@@ -195,9 +206,10 @@ export default {
     savedAnswers: { type: Array, default: () => [] },
     stats: { type: Object, default: () => ({ questions: 0, requests: 0, citations: 0, saved: 0 }) },
     token: { type: String, default: "" },
-    formatMessage: { type: Function, default: (t) => t }
+    formatMessage: { type: Function, default: (t) => t },
+    isAdmin: { type: Boolean, default: false }
   },
-  emits: ["new-chat", "open-arrivals", "logout", "search-books"],
+  emits: ["new-chat", "open-arrivals", "logout", "search-books", "open-admin"],
   data() {
     return {
       activePanel: null,
@@ -314,6 +326,7 @@ export default {
 .icon-item.logout:hover { background: rgba(220,38,38,0.12); color: #ef4444; }
 .icon-tooltip { position: absolute; left: 52px; background: #1a0f0a; color: #fdf6e3; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 100; border: 1px solid rgba(201,168,76,0.2); }
 .icon-item:hover .icon-tooltip { opacity: 1; }
+.sidebar-divider { width: 32px; height: 1px; background: rgba(201,168,76,0.15); margin: 4px auto; }
 .badge { position: absolute; top: 4px; right: 4px; background: #c9a84c; color: #0f0905; width: 16px; height: 16px; border-radius: 50%; font-size: 9px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
 
 /* Slide Panel */
