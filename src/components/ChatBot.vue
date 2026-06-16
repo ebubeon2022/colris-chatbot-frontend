@@ -114,11 +114,12 @@
         <h3>Welcome to COLRIS Library Assistant</h3>
         <p class="welcome-sub">Your 24/7 Covenant University Library companion — ask me anything</p>
         <div class="quick-chips">
-          <button class="chip" @click="quickAsk('What are the library opening hours?')">🕐 Library Hours</button>
+          <button class="chip" @click="quickAsk('What are the library opening hours?')">🕐 Hours</button>
           <button class="chip" @click="quickAsk('How do I borrow a book?')">📖 Borrowing</button>
+          <button class="chip" @click="quickAsk('What is the fine for returning a book late?')">💰 Fines</button>
           <button class="chip" @click="quickAsk('What databases are available?')">🗄️ Databases</button>
           <button class="chip" @click="quickAsk('How do I find a book in COLRIS?')">🔍 Find a Book</button>
-          <button class="chip" @click="quickAsk('What are the library rules?')">📋 Library Rules</button>
+          <button class="chip" @click="quickAsk('What are the library rules?')">📋 Rules</button>
           <button class="chip arrivals-chip" @click="openLatestArrivals">🆕 New Arrivals</button>
         </div>
         <div class="did-you-know">
