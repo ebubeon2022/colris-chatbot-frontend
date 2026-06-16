@@ -179,7 +179,7 @@
     <div v-if="!showSearch && !showArrivals" class="chat-input-area">
       <div v-if="attachedFile" class="file-preview-bar">
         <div class="file-preview-card">
-          <img v-if="attachedFile.type.startsWith('image')" :src="attachedPreviewUrl" class="file-preview-img" />
+          <img v-if="attachedFile && attachedFile.type && attachedFile.type.startsWith('image')" :src="attachedPreviewUrl" class="file-preview-img" @error="$event.target.style.display='none'" />
           <div v-else class="file-preview-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           </div>
@@ -863,15 +863,15 @@ export default {
 .req-badge.ordered { background: #fdf6e3; color: #8b5e3c; border: 1px solid #e8dcc8; }
 .req-date { font-size: 11px; color: #b8a898; }
 .req-note { margin-top: 6px; font-size: 12px; color: #5c3d2e; background: #fdf6e3; padding: 6px 10px; border-radius: 6px; }
-.file-preview-bar { padding: 8px 16px 0; }
-.file-preview-card { display: flex; align-items: center; gap: 10px; background: #f0e8dc; border: 1px solid #e8dcc8; border-radius: 10px; padding: 8px 12px; width: fit-content; max-width: 300px; position: relative; }
-.file-preview-img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
-.file-preview-icon { width: 40px; height: 40px; background: #1a0f0a; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #c9a84c; flex-shrink: 0; }
-.file-preview-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
-.file-preview-name { color: #1a0f0a; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+.file-preview-bar { padding: 10px 16px 0; }
+.file-preview-card { display: flex; align-items: center; gap: 12px; background: white; border: 1.5px solid #e2d8cc; border-radius: 12px; padding: 10px 14px; width: fit-content; max-width: 320px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.file-preview-img { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid #e2d8cc; }
+.file-preview-icon { width: 48px; height: 48px; background: #1a0f0a; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #c9a84c; flex-shrink: 0; }
+.file-preview-info { display: flex; flex-direction: column; gap: 3px; overflow: hidden; flex: 1; }
+.file-preview-name { color: #1a0f0a; font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
 .file-preview-size { color: #8b7355; font-size: 11px; }
-.file-preview-remove { background: rgba(0,0,0,0.1); border: none; cursor: pointer; color: #5c3d2e; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
-.file-preview-remove:hover { background: rgba(220,38,38,0.15); color: #dc2626; }
+.file-preview-remove { background: #f5ede0; border: none; cursor: pointer; color: #8b7355; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+.file-preview-remove:hover { background: #fee2e2; color: #dc2626; }
 .attachment-card { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 10px 14px; margin-bottom: 6px; max-width: 220px; }
 .attachment-icon { width: 32px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fdf6e3; flex-shrink: 0; }
 .attachment-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
