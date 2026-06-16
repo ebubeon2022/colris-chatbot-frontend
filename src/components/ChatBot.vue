@@ -644,7 +644,7 @@ export default {
       }
       var attachMeta = this.attachedFile ? { name: this.attachedFile.name, type: this.attachedFile.type } : null
       this.messages.push({ sender: 'user', text: this.userInput || '', attachment: attachMeta })
-      var userText = (this.userInput || '') + (fileContext ? '\n\n' + fileContext : '')
+      var userText = this.userInput
       this.userInput = ''
 
       this.isLoading = true
