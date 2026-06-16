@@ -18,10 +18,10 @@
     <section class="hero">
       <div class="hero-inner">
         <div class="hero-badge">Covenant University · Ota, Ogun State</div>
-        <h1 class="hero-title">{{ typedText }}<span class="cursor">|</span><br><span class="gold">Assistant</span></h1>
+        <h1 class="hero-title">{{ typedText }}<span class="cursor" v-show="isTyping">|</span><br><span class="gold">Assistant</span></h1>
         <p class="hero-sub">Instantly find books, generate citations, request resources, and get library support — all through a smart conversational interface built for CU students.</p>
         <div class="hero-actions">
-          <button @click="$emit('show-register')" class="btn-primary">Get Started Free</button>
+          <button @click="$emit('show-register')" class="btn-primary">Get Started</button>
           <button @click="$emit('show-login')" class="btn-secondary">Sign In</button>
         </div>
         <div class="hero-stats">
@@ -77,7 +77,7 @@
       <img src="/cu-logo.png" alt="CU" class="cta-logo" />
       <h2>Ready to transform how you use the Covenant University Library?</h2>
       <p>Join students already using COLRIS AI Assistant for smarter library access.</p>
-      <button @click="$emit('show-register')" class="btn-primary large">Get Started Free</button>
+      <button @click="$emit('show-register')" class="btn-primary large">Get Started</button>
     </section>
 
     <footer class="footer">
@@ -100,6 +100,7 @@ export default {
       typedText: "",
       fullText: "Your 24/7 AI Library",
       typingIndex: 0,
+      isTyping: true,
       featureCards: [
         { icon: "🔍", title: "Book Discovery", desc: "Search the COLRIS catalogue instantly. Get direct links to any book, journal or resource." },
         { icon: "📝", title: "Citation Generator", desc: "Generate APA, MLA, or Harvard citations in seconds. Just provide the book details." },
@@ -121,6 +122,8 @@ export default {
         this.typedText += this.fullText[this.typingIndex]
         this.typingIndex++
         setTimeout(this.startTyping, 60)
+      } else {
+        this.isTyping = false
       }
     },
     initParticles() {
