@@ -3,7 +3,7 @@
     <div class="chat-header">
 
       <div class="header-content">
-        <div class="header-avatar">📚</div>
+        <div class="header-avatar"><img src="https://clr.covenantuniversity.edu.ng/discovery/custom/234COU_INST-VU1/img/logo.png" alt="CU" style="width:38px;height:38px;object-fit:contain;border-radius:6px;" /></div>
         <div>
           <h2>COLRIS Library Assistant</h2>
           <p class="header-status">
