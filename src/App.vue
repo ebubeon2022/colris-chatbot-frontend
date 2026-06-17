@@ -31,6 +31,7 @@
         @open-arrivals="openArrivals"
         @open-admin="currentView = 'admin'"
         @logout="handleLogout"
+        @load-session="handleSessionLoad"
       />
       <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false"></div>
 
