@@ -142,7 +142,11 @@
         <div v-if="activePanel === 'citation'" class="panel-content">
           <p class="panel-desc">Generate a formatted academic citation.</p>
           <div class="panel-form">
-            <input v-model="citAuthor" placeholder="Author(s)" class="panel-input" />
+            <div v-for="(author, index) in citAuthors" :key="index" style="display:flex;gap:4px;margin-bottom:4px">
+              <input v-model="citAuthors[index]" :placeholder="index === 0 ? 'Author 1 e.g. Smith, J. A.' : 'Author ' + (index+1)" class="panel-input" style="margin-bottom:0;flex:1" />
+              <button v-if="index > 0" @click="citAuthors.splice(index,1)" style="background:#c0392b;color:white;border:none;border-radius:4px;padding:0 8px;cursor:pointer">x</button>
+            </div>
+            <button @click="citAuthors.push('')" style="background:transparent;border:1px dashed #c9a84c;color:#c9a84c;border-radius:4px;padding:4px 8px;cursor:pointer;font-size:11px;width:100%;margin-bottom:6px">+ Add Author</button>
             <input v-model="citTitle" placeholder="Title of Book/Article" class="panel-input" />
             <input v-model="citYear" placeholder="Year of Publication" class="panel-input" />
             <input v-model="citPublisher" placeholder="Publisher" class="panel-input" />
@@ -266,7 +270,7 @@ export default {
       activePanel: null,
       searchQuery: "", searchResults: [], isSearching: false, hasSearched: false,
       reqTitle: "", reqAuthor: "", reqReason: "", reqMsg: "", reqSuccess: false, isSubmitting: false,
-      citAuthor: "", citTitle: "", citYear: "", citPublisher: "", citCity: "", citStyle: "APA7", citResult: "", citCopied: false,
+      citAuthors: [""], citTitle: "", citYear: "", citPublisher: "", citCity: "", citStyle: "APA7", citResult: "", citCopied: false,
       myRequests: [], loadingReqs: false, pendingCount: 0,
       conversations: [], loadingConvs: false,
       colrisUrl: "",
@@ -359,8 +363,23 @@ export default {
       this.isSubmitting = false
     },
     generateCit() {
-      if (!this.citTitle || !this.citAuthor || !this.citYear) { alert("Fill Author, Title and Year."); return }
-      const a = this.citAuthor, t = this.citTitle, y = this.citYear, p = this.citPublisher, c = this.citCity
+      const authors = this.citAuthors.filter(a => a.trim() !== "")
+      if (!this.citTitle || authors.length === 0 || !this.citYear) { alert("Fill at least one Author, Title and Year."); return }
+      let a = ""
+      if (this.citStyle.startsWith("APA")) {
+        if (authors.length === 1) a = authors[0]
+        else if (authors.length === 2) a = authors[0] + " & " + authors[1]
+        else a = authors.slice(0, -1).join(", ") + ", & " + authors[authors.length - 1]
+      } else if (this.citStyle.startsWith("MLA")) {
+        if (authors.length === 1) a = authors[0]
+        else if (authors.length === 2) a = authors[0] + ", and " + authors[1]
+        else a = authors[0] + ", et al."
+      } else {
+        if (authors.length === 1) a = authors[0]
+        else if (authors.length === 2) a = authors[0] + " and " + authors[1]
+        else a = authors[0] + " et al."
+      }
+      const t = this.citTitle, y = this.citYear, p = this.citPublisher, c = this.citCity
       if (this.citStyle === "APA7") {
         // APA 7th: Author, A. A. (Year). Title of work: Capital letter after colon. Publisher.
         this.citResult = a + " (" + y + "). " + t + ". " + p + "."
