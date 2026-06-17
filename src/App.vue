@@ -169,6 +169,9 @@ export default {
       this.selectedSession = null
       this.sidebarOpen = false
     },
+    handleSessionLoad(sessionId) {
+      this.selectedSession = sessionId
+    },
     handleNewSession(sessionId) {
       this.selectedSession = sessionId
       this.loadHistory()
