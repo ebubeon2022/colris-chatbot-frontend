@@ -32,6 +32,7 @@
         @open-admin="currentView = 'admin'"
         @logout="handleLogout"
         @load-session="handleSessionLoad"
+        @stat-update="handleStatUpdate"
       />
       <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false"></div>
 
@@ -86,6 +87,7 @@
           :session-id="selectedSession"
           @open-sidebar="sidebarOpen = true"
           @new-session="handleNewSession"
+          @stat-update="handleStatUpdate"
         />
       </div>
     </div>
@@ -168,6 +170,11 @@ export default {
       this.chatKey++
       this.selectedSession = null
       this.sidebarOpen = false
+    },
+    handleStatUpdate(type) {
+      if (this.sessionStats[type] !== undefined) {
+        this.sessionStats[type]++
+      }
     },
     handleSessionLoad(sessionId) {
       this.selectedSession = sessionId

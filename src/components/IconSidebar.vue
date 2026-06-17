@@ -263,7 +263,7 @@ export default {
     formatMessage: { type: Function, default: (t) => t },
     isAdmin: { type: Boolean, default: false }
   },
-  emits: ["new-chat", "open-arrivals", "logout", "open-admin", "load-session"],
+  emits: ["new-chat", "open-arrivals", "logout", "open-admin", "load-session", "stat-update"],
   data() {
     return {
       collapsed: true,
@@ -357,12 +357,14 @@ export default {
           headers: { "Content-Type": "application/json", "Authorization": "Bearer " + this.token },
           body: JSON.stringify({ title: this.reqTitle, author: this.reqAuthor, reason: this.reqReason })
         })
-        if (res.ok) { this.reqSuccess = true; this.reqMsg = "Request submitted!"; this.reqTitle = ""; this.reqAuthor = ""; this.reqReason = "" }
+        if (res.ok) { this.reqSuccess = true
+          this.$emit("stat-update", "requests"); this.reqMsg = "Request submitted!"; this.reqTitle = ""; this.reqAuthor = ""; this.reqReason = "" }
         else { this.reqMsg = "Failed. Try again."; this.reqSuccess = false }
       } catch (e) { this.reqMsg = "Network error."; this.reqSuccess = false }
       this.isSubmitting = false
     },
     generateCit() {
+      this.$emit("stat-update", "citations")
       const authors = this.citAuthors.filter(a => a.trim() !== "")
       if (!this.citTitle || authors.length === 0 || !this.citYear) { alert("Fill at least one Author, Title and Year."); return }
       let a = ""

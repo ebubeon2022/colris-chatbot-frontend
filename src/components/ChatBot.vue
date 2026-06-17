@@ -300,7 +300,7 @@ import axios from 'axios'
 
 export default {
   name: 'ChatBot',
-  emits: ['logout', 'open-sidebar', 'new-session'],
+  emits: ['logout', 'open-sidebar', 'new-session', 'stat-update'],
   props: {
     user: Object,
     sessionId: String,
@@ -658,6 +658,7 @@ export default {
         if (!this.currentSessionId) {
           this.currentSessionId = response.data.session_id
           this.$emit('new-session', this.currentSessionId)
+          this.$emit('stat-update', 'questions')
         }
         this.messages.push({ sender: 'bot', text: response.data.reply, isFallback: response.data.is_fallback || false })
       } catch (error) {
