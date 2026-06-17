@@ -148,9 +148,12 @@
             <input v-model="citPublisher" placeholder="Publisher" class="panel-input" />
             <input v-model="citCity" placeholder="City (optional)" class="panel-input" />
             <select v-model="citStyle" class="panel-input">
-              <option value="APA">APA</option>
-              <option value="MLA">MLA</option>
+              <option value="APA7">APA 7th Edition</option>
+              <option value="APA6">APA 6th Edition</option>
+              <option value="MLA9">MLA 9th Edition</option>
+              <option value="MLA8">MLA 8th Edition</option>
               <option value="Harvard">Harvard</option>
+              <option value="Chicago">Chicago</option>
             </select>
             <button @click="generateCit" class="panel-submit-btn">Generate Citation</button>
             <div v-if="citResult" class="cit-result-box">
@@ -263,7 +266,7 @@ export default {
       activePanel: null,
       searchQuery: "", searchResults: [], isSearching: false, hasSearched: false,
       reqTitle: "", reqAuthor: "", reqReason: "", reqMsg: "", reqSuccess: false, isSubmitting: false,
-      citAuthor: "", citTitle: "", citYear: "", citPublisher: "", citCity: "", citStyle: "APA", citResult: "", citCopied: false,
+      citAuthor: "", citTitle: "", citYear: "", citPublisher: "", citCity: "", citStyle: "APA7", citResult: "", citCopied: false,
       myRequests: [], loadingReqs: false, pendingCount: 0,
       conversations: [], loadingConvs: false,
       colrisUrl: "",
@@ -357,9 +360,26 @@ export default {
     },
     generateCit() {
       if (!this.citTitle || !this.citAuthor || !this.citYear) { alert("Fill Author, Title and Year."); return }
-      if (this.citStyle === "APA") this.citResult = this.citAuthor + " (" + this.citYear + "). " + this.citTitle + ". " + (this.citCity ? this.citCity + ": " : "") + this.citPublisher + "."
-      else if (this.citStyle === "MLA") this.citResult = this.citAuthor + ". " + this.citTitle + ". " + this.citPublisher + ", " + this.citYear + "."
-      else this.citResult = this.citAuthor + " " + this.citYear + ", " + this.citTitle + ", " + this.citPublisher + (this.citCity ? ", " + this.citCity : "") + "."
+      const a = this.citAuthor, t = this.citTitle, y = this.citYear, p = this.citPublisher, c = this.citCity
+      if (this.citStyle === "APA7") {
+        // APA 7th: Author, A. A. (Year). Title of work: Capital letter after colon. Publisher.
+        this.citResult = a + " (" + y + "). " + t + ". " + p + "."
+      } else if (this.citStyle === "APA6") {
+        // APA 6th: Author, A. A. (Year). Title of work. City: Publisher.
+        this.citResult = a + " (" + y + "). " + t + ". " + (c ? c + ": " : "") + p + "."
+      } else if (this.citStyle === "MLA9") {
+        // MLA 9th: Author. Title of Book. Publisher, Year.
+        this.citResult = a + ". " + t + ". " + p + ", " + y + "."
+      } else if (this.citStyle === "MLA8") {
+        // MLA 8th: Author. Title of Book. Publisher, Year.
+        this.citResult = a + ". " + t + ". " + p + ", " + y + "."
+      } else if (this.citStyle === "Harvard") {
+        // Harvard: Author (Year) Title. City: Publisher.
+        this.citResult = a + " (" + y + ") " + t + ". " + (c ? c + ": " : "") + p + "."
+      } else if (this.citStyle === "Chicago") {
+        // Chicago: Author. Title. City: Publisher, Year.
+        this.citResult = a + ". " + t + ". " + (c ? c + ": " : "") + p + ", " + y + "."
+      }
     },
     copyCit() { navigator.clipboard.writeText(this.citResult).then(() => { this.citCopied = true; setTimeout(() => this.citCopied = false, 2000) }) },
     async loadMyRequests() {
